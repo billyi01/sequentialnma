@@ -1,0 +1,10 @@
+Package: sequentialnma
+Type: Package
+Title: Sequential network meta-analysis
+Version: 0.1.0
+Author: Adriani Nikolakopoulou
+Maintainer: Adriani Nikolakopoulou <nikolakopoulou.adriani@gmail.com>
+Description: A package to perform network meta-analysis sequentially accounting for the inflation of type I error.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
