@@ -16,6 +16,8 @@ alpha <- function(method, t) {
   E = qnorm(1 - at/2, mean = 0, sd = 1, lower.tail = TRUE, 
             log.p = FALSE)
   output <- data.frame(t = t, at = at, E = E)
+  output$E[output$E<za & output$E>0]<-za
+  output$E[output$E>-za & output$E<0]<--za
   return(output)
   result <- array(0, 1, length(output))
   for (j in 1:length(output)) {
