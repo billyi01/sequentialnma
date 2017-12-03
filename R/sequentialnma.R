@@ -24,7 +24,8 @@ sequentialnma=function (data, perarm=T, type, sm, tau.preset = NULL, comb.fixed=
   result=mapply(runmain,accIds,SIMPLIFY = FALSE) 
 
   #run again the last step of sequential nma including all studies
-  laststep=main(data=studies, perarm=perarm, type=type, sm=sm, tau.preset = tau.preset, comb.fixed, comb.random)
+  laststep=main(data=studies, perarm=perarm, type=type, sm=sm, 
+                tau.preset = tau.preset, comb.fixed, comb.random, delta=delta)
 
   res=list(result=result,studies=studies,laststep=laststep)
   class(res)<-"sequentialnma"

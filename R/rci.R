@@ -46,37 +46,18 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
   ############################forest plot with repeated confidence intervals################################
 
   if(evidence=="pairwise"){
-    p1=ggplot(Effects)+
+    p=ggplot(Effects)+
       geom_point(aes(Effects$DirTE,Effects$steps))
-    p1=p1+geom_line(data=ForReapPlot,aes(DirRCI,StepsForPlot,group=StepsForPlot),colour="red")
-    p1=p1+geom_line(data=ForReapPlot,aes(DirCI,StepsForPlot,group=StepsForPlot))
-    p1=p1+geom_vline(xintercept = 0)
-    p1
-
+    p=p+geom_line(data=ForReapPlot,aes(DirRCI,StepsForPlot,group=StepsForPlot),colour="blue")
+    p=p+geom_line(data=ForReapPlot,aes(DirCI,StepsForPlot,group=StepsForPlot))
+    p=p+geom_vline(xintercept = 0)
   }
   if(evidence=="network"){
-    plot(c(-3,3), c(-length(NetworkTE),0), type = "n", xlab = " ", ylab = " ", asp =asp, xlim=c(-3,3), ylim=c(-length(NetworkTE),0))
-    par(new=TRUE)
-
-    for (i in 1:length(NetworkTE)){
-      points(c(NetworkLRCI[i],NetworkURCI[i]),c(-i,-i),type="l", lty=2, lwd=0.1, col="black")
-      points(c(NetworkLCI[i],NetworkUCI[i]),c(-i,-i),type="l", lwd=0.1, col="red")
-      points(NetworkTE[i],(-i), col="black", cex=0.2, type="p", lwd=0.1)
-    }
-    abline(v=0)
-    axis(1, at = seq(-1, 1, by = 1))
-    if (is.na(outcome)){
-      title(comparison)
-    }
-    if (!is.na(outcome)){
-      if(outcome=="beneficial"){
-        title(comparison, sub="Favors second              Favors first")
-
-      }
-      if(outcome=="harmful"){
-        title(comparison, sub="Favors first               Favors second")
-      }
-    }
+    p=ggplot(Effects)+
+      geom_point(aes(Effects$NetwTE,Effects$steps))
+    p=p+geom_line(data=ForReapPlot,aes(NetwRCI,StepsForPlot,group=StepsForPlot),colour="red")
+    p=p+geom_line(data=ForReapPlot,aes(NetwCI,StepsForPlot,group=StepsForPlot))
+    p=p+geom_vline(xintercept = 0)
     }
   if(evidence=="both.separate"){
     par(mfrow=c(1,2))
@@ -151,5 +132,5 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
       }
     }
   }
-  p1
+  p
 }
