@@ -7,6 +7,7 @@ formatdata=function (data,args)
   }
   type=getpar("type")
   
+  #define correspondance between old and new names
   defaultargs = function (arg){
     switch(arg, "studlab" = "id"
            , "t" = "t"
@@ -33,10 +34,9 @@ formatdata=function (data,args)
            , "t2"="t2"
            , "year"="sortvar")}
     
-  
   oldnames = colnames(data)
 
- 
+  #define new names of variables in the dataset
  newnames = as.vector(
    mapply(function(name){
      i = match(name,unlist(args))
@@ -51,6 +51,7 @@ formatdata=function (data,args)
    },oldnames)
  )
   
+ #function to check whether mandotory arguments exist in the data and stop otherwise
  checkarguments = function(nnames,mands){
    mapply(function(field){
     if(any(is.na(match(field,nnames)))) {
@@ -58,7 +59,8 @@ formatdata=function (data,args)
     }
    },mands)
  }
-  #check data set columns
+  
+ #define mandatory data for each data type and check whether exist in the data
   if (perarm && type=="binary"){
     mandatories = c("id","t","r","n","year")
     checkarguments(newnames,mandatories)
@@ -71,9 +73,8 @@ formatdata=function (data,args)
    mandatories = c("id","t1","t2","TE","seTE","year")
    checkarguments(newnames,mandatories)
  }
-  
 
- #sort everything according to sorting value
+ #sort everything according to sorting value and define new names
  orddata=data[order(unlist(data[args$sortvar])),]
  colnames(orddata) = newnames
  studies = orddata

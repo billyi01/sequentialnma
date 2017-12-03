@@ -1,23 +1,33 @@
 main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixed=F, comb.random=T){
   
-  #network meta-analysis
+  #perform network meta-analysis
   if (perarm & type=="binary"){
     Dpairs=pairwise(treat=t,event=r,n=n, data=data, studlab = id, sm= sm)
-    metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
-                      comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
+    checkconn=netconnection(treat1,treat2,studlab,data=Dpairs)
+    if (checkconn$n.subnets==1 && checkconn$m>1){
+      metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
+                        comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
+    }
   } 
   
   if (perarm & type=="continuous"){
     Dpairs=pairwise(treat=t,mean=y,sd=sd,n=n,data=data, studlab =id, sm=sm)
+    checkconn=netconnection(treat1,treat2,studlab,data=Dpairs)
+    if (checkconn$n.subnets==1 && checkconn$m>1){
     metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
                       comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
+    }
   }
   
   if (!perarm){
+    checkconn=netconnection(t1,t2,studlab=id,data=data)
+    if (checkconn$n.subnets==1 && checkconn$m>1){
     metaNetw=netmeta(TE,seTE,t1,t2,studlab=id,data=data,sm=sm,
                      comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
+    }
   }
   
+  if (checkconn$n.subnets==1 && checkconn$m>1){
   #store pairwise and network meta-analysis results
   sideSplit=netsplit(metaNetw)
   
@@ -44,33 +54,37 @@ main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixe
   }
   
   input=cbind(c(Direct),c(DirectSE),c(DirectL),c(DirectU),c(TE.nma),c(seTE.nma),c(LCI.nma),c(UCI.nma))
-  
   rownames(input) <- c(sideSplit$comparison)
   colnames(input) <- c("DirectTE","DirectSE","DirectL","DirectU",
                        "NetworkTE","NetworkSE","NetworkL","NetworkU")
   input=as.data.frame(input)
   
-  #sequential
+  #anticipated effect size equal to final nma
   delta=input$NetworkTE
+  #z scores and accumulated information
   Zpairw = input$DirectTE/input$DirectSE
   Ipairw = 1/input$DirectSE
   Zntw <- input$NetworkTE/input$NetworkSE
   Intw <- 1/input$NetworkSE
-  ImaxPairw = ImaxNMA = abs((-qnorm(0.05/(2), 0, 1, lower.tail = TRUE, 
-                                    log.p = FALSE) + qnorm(1 - 0.1, 0, 1, lower.tail = TRUE, 
-                                                           log.p = FALSE))/(delta))
+  #maximum required information
+  ImaxPairw = ImaxNMA = abs((-qnorm(0.05/(2), 0, 1, lower.tail = TRUE,log.p = FALSE) 
+                      + qnorm(1 - 0.1, 0, 1, lower.tail = TRUE, log.p = FALSE))/(delta))
+  #fraction of accumulated information
   tallPairw = Ipairw/ImaxPairw
   tallNMA = Intw/ImaxNMA
+  #calculation of sequential boundaries
   SeqEffPairw = alpha(method = "BF", t = tallPairw)
   SeqEffNMA = alpha(method = "BF", t = tallNMA)
   AtPairw = SeqEffPairw[, 2]
   EbPairw = SeqEffPairw[, 3]
   AtNMA = SeqEffNMA[, 2]
   EbNMA = SeqEffNMA[, 3]
+  #repeated confidence intervals
   LrciPairw = input$DirectTE - EbPairw * input$DirectSE
   UrciPairw = input$DirectTE + EbPairw * input$DirectSE
   LrciNMA = input$NetworkTE - EbNMA * input$NetworkSE
   UrciNMA = input$NetworkTE + EbNMA * input$NetworkSE
+  #store sequential nma calculations together with nma results
   output = data.frame(input,delta, Zpairw, Ipairw, Zntw, Intw, 
                       tallPairw, tallNMA, AtPairw, EbPairw, AtNMA, EbNMA, 
                       LrciPairw, UrciPairw, LrciNMA, UrciNMA)
@@ -81,8 +95,8 @@ main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixe
                         "DirectBoundary", "NetworkAlpha", "NetworkBoundary", 
                         "DirectLowerRCI", "DirectUpperRCI", "NetworkLowerRCI", 
                         "NetworkUpperRCI")
-  
   return(list(output=output))
+  }
 }
 
 
