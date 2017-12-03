@@ -1,21 +1,20 @@
-main <- function(data, perarm=T, type, sm, tau.preset = NULL, comb.fixed=F, comb.random=T
-                , t=NA, r=NA, n=NA, y=NA, sd=NA, TE=NA, seTE=NA, t1=NA, t2=NA){
+main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixed=F, comb.random=T){
   
   #network meta-analysis
   if (perarm & type=="binary"){
-    Dpairs=pairwise(treat=t,event=r,n=n, data=data, studlab = studlab, sm= sm)
-    metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,subset=subset,
+    Dpairs=pairwise(treat=t,event=r,n=n, data=data, studlab = id, sm= sm)
+    metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
                       comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
   } 
   
   if (perarm & type=="continuous"){
-    Dpairs=pairwise(treat=t,mean=y,sd=sd,n=n,data=data, studlab =studlab, sm=sm)
-    metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,subset=subset,
+    Dpairs=pairwise(treat=t,mean=y,sd=sd,n=n,data=data, studlab =id, sm=sm)
+    metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
                       comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
   }
   
   if (!perarm){
-    metaNetw=netmeta(TE,seTE,t1,t2,studlab,data=data,sm=sm,subset=subset,
+    metaNetw=netmeta(TE,seTE,t1,t2,studlab=id,data=data,sm=sm,
                      comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
   }
   
