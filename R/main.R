@@ -1,4 +1,4 @@
-main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixed=F, comb.random=T){
+main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixed=F, comb.random=T,delta=NA){
   
   #perform network meta-analysis
   if (perarm & type=="binary"){
@@ -60,7 +60,9 @@ main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixe
   input=as.data.frame(input)
   
   #anticipated effect size equal to final nma
-  delta=input$NetworkTE
+  delta=as.data.frame(delta)
+  delta = delta[rownames(input),]
+  #delta=Filter(delta
   #z scores and accumulated information
   Zpairw = input$DirectTE/input$DirectSE
   Ipairw = 1/input$DirectSE

@@ -1,81 +1,58 @@
-#' Forest plot with repeated confidence intervals for pairwise and network meta-analysis
-#'
-#' This function draws a forest plot with repeated confidence intervals
-#' in the active graphics window for pairwise and network meta-analysis.
-#' @usage S3 method for class livenma
-#' @param x An object of class livenma
-#' @param comparison The comparison for which the stopping framework to be drawn. It can be
-#' specified as x$comparison[] whith the particular number withing the squared brackets or as
-#' a string variable.
-#' @param evidence A character string to indicate whether the stopping framework should be drawn
-#' based on "pairwise", "network", "both.separate" or "both.together" evidence. "both.separate"
-#' will draw two forest plots side by side where "both.together" will draw both pairwise and
-#' network meta-anlysis results on the same forest plot. The later option may not be convenient
-#' for large datasets.
-#' @param asp An optional value to indicate the respective option for the plot command.
-#' @param outcome An optional value to indicate whether the outcome is beneficial or harmful. If
-#' specified, the respective direction is indicated in the plot.
-#' @return A forest plot with repeated confidence intervals
-#' @export
+# Forest plot with repeated confidence intervals for pairwise and network meta-analysis
+#
+# This function draws a forest plot with repeated confidence intervals
+# in the active graphics window for pairwise and network meta-analysis.
 
-rci<-function(x,comparison,evidence,asp=0.01,outcome=NA){
+repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
 
-  if (!inherits(x, "livenma"))
-    stop("Argument 'x' must be an object of class \"livenma\"")
+  library("ggplot2", lib.loc="~/R/win-library/3.2")
+
+  if (!inherits(seqnmaobject, "sequentialnma"))
+    stop("Argument 'seqnmaobject' must be an object of class \"sequentialnma\"")
 
   #####################set values#############################
-
-  TargetComp=comparison
-  tc=min(which((x$comparison==TargetComp)== TRUE))
-  D=x$D
-
-  DirectTE=as.vector(x$Prosp[tc,2,1:(max(D$idyear)-(x$frn-2))],mode="numeric")
-  NetworkTE=as.vector(x$Prosp[tc,5,1:(max(D$idyear)-(x$frn-2))],mode="numeric")
-  DirectLCI=as.vector(x$Prosp[tc,2,1:(max(D$idyear)-(x$frn-2))],mode="numeric")-1.96*as.vector(x$Prosp[tc,3,1:(max(D$idyear)-(x$frn-2))],mode="numeric")
-  NetworkLCI=as.vector(x$Prosp[tc,5,1:(max(D$idyear)-(x$frn-2))],mode="numeric")-1.96*as.vector(x$Prosp[tc,6,1:(max(D$idyear)-(x$frn-2))],mode="numeric")
-  DirectUCI=as.vector(x$Prosp[tc,2,1:(max(D$idyear)-(x$frn-2))],mode="numeric")+1.96*as.vector(x$Prosp[tc,3,1:(max(D$idyear)-(x$frn-2))],mode="numeric")
-  NetworkUCI=as.vector(x$Prosp[tc,5,1:(max(D$idyear)-(x$frn-2))],mode="numeric")+1.96*as.vector(x$Prosp[tc,6,1:(max(D$idyear)-(x$frn-2))],mode="numeric")
-  DirectLRCI=as.vector(x$Prosp[tc,18,1:(max(D$idyear)-(x$frn-2))],mode="numeric")
-  NetworkLRCI=as.vector(x$Prosp[tc,20,1:(max(D$idyear)-(x$frn-2))],mode="numeric")
-  DirectURCI=as.vector(x$Prosp[tc,19,1:(max(D$idyear)-(x$frn-2))],mode="numeric")
-  NetworkURCI=as.vector(x$Prosp[tc,21,1:(max(D$idyear)-(x$frn-2))],mode="numeric")
-
-  DirectTE=DirectTE[!is.na(DirectTE)]
-  NetworkTE=NetworkTE[!is.na(NetworkTE)]
-  DirectLCI=DirectLCI[!is.na(DirectLCI)]
-  NetworkLCI=NetworkLCI[!is.na(NetworkLCI)]
-  DirectUCI=DirectUCI[!is.na(DirectUCI)]
-  NetworkUCI=NetworkUCI[!is.na(NetworkUCI)]
-  DirectLRCI=DirectLRCI[!is.na(DirectLRCI)]
-  NetworkLRCI=NetworkLRCI[!is.na(NetworkLRCI)]
-  DirectURCI=DirectURCI[!is.na(DirectURCI)]
-  NetworkURCI=NetworkURCI[!is.na(NetworkURCI)]
-
+  DirTE = unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"DirectTE"])},
+                        1:length(seqnmaobject$result)))
+  NetwTE=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkTE"])},
+                       1:length(seqnmaobject$result)))
+  DirLCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"DirectL"])},
+                       1:length(seqnmaobject$result)))
+  NetworkLCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkL"])},
+                           1:length(seqnmaobject$result)))
+  DirectUCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"DirectU"])},
+                          1:length(seqnmaobject$result)))
+  NetworkUCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkU"])},
+                           1:length(seqnmaobject$result)))
+  DirectLRCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"DirectLowerRCI"])},
+                           1:length(seqnmaobject$result)))
+  NetworkLRCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkLowerRCI"])},
+                            1:length(seqnmaobject$result)))
+  DirectURCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"DirectUpperRCI"])},
+                           1:length(seqnmaobject$result)))
+  NetworkURCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkUpperRCI"])},
+                            1:length(seqnmaobject$result)))
+  steps=length(NetwTE):1
+  Effects=data.frame(DirTE,NetwTE,steps)
+  
+  DirCI=c(DirLCI,DirectUCI)
+  NetwCI=c(NetworkLCI,NetworkUCI)
+  DirRCI=c(DirectLRCI,DirectURCI)
+  NetwRCI=c(NetworkLRCI,NetworkURCI)
+  DirEffect=c(DirTE,DirTE)
+  NetwEffect=c(NetwTE,NetwTE)
+  StepsForPlot=c(steps,steps)
+  ForReapPlot=data.frame(DirCI,NetwCI,DirRCI,NetwRCI,DirEffect,NetwEffect,StepsForPlot)
+  
   ############################forest plot with repeated confidence intervals################################
 
   if(evidence=="pairwise"){
-    plot(c(-3,3), c(-length(DirectTE),0), type = "n", xlab = " ", ylab = " ", asp =asp, xlim=c(-3,3), ylim=c(-length(DirectTE),0))
-    par(new=TRUE)
+    p1=ggplot(Effects)+
+      geom_point(aes(Effects$DirTE,Effects$steps))
+    p1=p1+geom_line(data=ForReapPlot,aes(DirRCI,StepsForPlot,group=StepsForPlot),colour="red")
+    p1=p1+geom_line(data=ForReapPlot,aes(DirCI,StepsForPlot,group=StepsForPlot))
+    p1=p1+geom_vline(xintercept = 0)
+    p1
 
-    for (i in 1:length(DirectTE)){
-      points(c(DirectLRCI[i],DirectURCI[i]),c(-i,-i),type="l", lty=2, lwd=0.1, col="black")
-      points(c(DirectLCI[i],DirectUCI[i]),c(-i,-i),type="l", lwd=0.1, col="blue")
-      points(DirectTE[i],(-i), col="black", cex=0.2, lwd=0.1, type="p")
-    }
-    abline(v=0)
-    axis(1, at = seq(-1, 1, by = 1))
-    if (is.na(outcome)){
-      title(comparison)
-    }
-    if (!is.na(outcome)){
-      if(outcome=="beneficial"){
-        title(comparison, sub="Favors second              Favors first")
-
-      }
-      if(outcome=="harmful"){
-        title(comparison, sub="Favors first               Favors second")
-      }
-    }
   }
   if(evidence=="network"){
     plot(c(-3,3), c(-length(NetworkTE),0), type = "n", xlab = " ", ylab = " ", asp =asp, xlim=c(-3,3), ylim=c(-length(NetworkTE),0))
@@ -173,5 +150,6 @@ rci<-function(x,comparison,evidence,asp=0.01,outcome=NA){
         title(comparison, sub="Favors first               Favors second")
       }
     }
-    }
+  }
+  p1
 }

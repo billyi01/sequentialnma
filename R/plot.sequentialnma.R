@@ -1,7 +1,10 @@
 plot.sequentialnma=function (x, comparison, evidence, asp = 1, outcome = NA) 
 {
+  library("ggplot2", lib.loc="~/R/win-library/3.2")
+  
   if (!inherits(x, "sequentialnma")) 
     stop("Argument 'x' must be an object of class \"sequentialnma\"")
+  
   TargetComp = comparison
   tc = min(which((x$comparison == TargetComp) == TRUE))
   D = x$D
