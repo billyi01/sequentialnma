@@ -5,8 +5,9 @@
 
 repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
 
-  library("ggplot2", lib.loc="~/R/win-library/3.2")
-
+  library(ggplot2)
+  library(grid)
+  
   if (!inherits(seqnmaobject, "sequentialnma"))
     stop("Argument 'seqnmaobject' must be an object of class \"sequentialnma\"")
 
@@ -32,7 +33,8 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
   NetworkURCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkUpperRCI"])},
                             1:length(seqnmaobject$result)))
   steps=length(NetwTE):1
-  Effects=data.frame(DirTE,NetwTE,steps)
+  steps0=steps-0.2
+  Effects=data.frame(DirTE,NetwTE,steps,steps0)
   
   DirCI=c(DirLCI,DirectUCI)
   NetwCI=c(NetworkLCI,NetworkUCI)
@@ -41,7 +43,8 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
   DirEffect=c(DirTE,DirTE)
   NetwEffect=c(NetwTE,NetwTE)
   StepsForPlot=c(steps,steps)
-  ForReapPlot=data.frame(DirCI,NetwCI,DirRCI,NetwRCI,DirEffect,NetwEffect,StepsForPlot)
+  StepsForPlot0=c(steps0,steps0)
+  ForReapPlot=data.frame(DirCI,NetwCI,DirRCI,NetwRCI,DirEffect,NetwEffect,StepsForPlot,StepsForPlot0)
   
   ############################forest plot with repeated confidence intervals################################
 
@@ -51,6 +54,11 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
     p=p+geom_line(data=ForReapPlot,aes(DirRCI,StepsForPlot,group=StepsForPlot),colour="blue")
     p=p+geom_line(data=ForReapPlot,aes(DirCI,StepsForPlot,group=StepsForPlot))
     p=p+geom_vline(xintercept = 0)
+    p=p +labs(title=comparison,
+              x =" ", y = " ")
+    p=p + theme(axis.title.y=element_blank(),
+                axis.text.y=element_blank(),
+                axis.ticks.y=element_blank())
   }
   if(evidence=="network"){
     p=ggplot(Effects)+
@@ -58,79 +66,71 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
     p=p+geom_line(data=ForReapPlot,aes(NetwRCI,StepsForPlot,group=StepsForPlot),colour="red")
     p=p+geom_line(data=ForReapPlot,aes(NetwCI,StepsForPlot,group=StepsForPlot))
     p=p+geom_vline(xintercept = 0)
+    p=p +labs(title=comparison,
+              x =" ", y = " ")
+    p=p + theme(axis.title.y=element_blank(),
+                axis.text.y=element_blank(),
+                axis.ticks.y=element_blank())
     }
   if(evidence=="both.separate"){
-    par(mfrow=c(1,2))
-    plot(c(-3,3), c(-length(DirectTE),0), type = "n", xlab = " ", ylab = " ", asp =asp, xlim=c(-3,3), ylim=c(-length(DirectTE),0))
-    par(new=TRUE)
-    for (i in 1:length(DirectTE)){
-      points(c(DirectLRCI[i],DirectURCI[i]),c(-i,-i),type="l", lty=2, lwd=0.1, col="black")
-      points(c(DirectLCI[i],DirectUCI[i]),c(-i,-i),type="l", lwd=0.1, col="blue")
-      points(DirectTE[i],(-i), col="black", cex=0.2, lwd=0.1, type="p")
-    }
-    abline(v=0)
-    axis(1, at = seq(-1, 1, by = 1))
-    if (is.na(outcome)){
-      title(comparison)
-    }
-    if (!is.na(outcome)){
-      if(outcome=="beneficial"){
-        title(comparison, sub="Favors second              Favors first")
-
-      }
-      if(outcome=="harmful"){
-        title(comparison, sub="Favors first               Favors second")
-      }
-    }
-
-    plot(c(-3,3), c(-length(NetworkTE),0), type = "n", xlab = " ", ylab = " ", asp =asp, xlim=c(-3,3), ylim=c(-length(NetworkTE),0))
-    par(new=TRUE)
-    for (i in 1:length(NetworkTE)){
-      points(c(NetworkLRCI[i],NetworkURCI[i]),c(-i,-i),type="l", lty=2, lwd=0.1, col="black")
-      points(c(NetworkLCI[i],NetworkUCI[i]),c(-i,-i),type="l", lwd=0.1, col="red")
-      points(NetworkTE[i],(-i), col="black", cex=0.2, type="p", lwd=0.1)
-    }
-    abline(v=0)
-    axis(1, at = seq(-1, 1, by = 1))
-    if (is.na(outcome)){
-      title(comparison)
-    }
-    if (!is.na(outcome)){
-      if(outcome=="beneficial"){
-        title(comparison, sub="Favors second              Favors first")
-
-      }
-      if(outcome=="harmful"){
-        title(comparison, sub="Favors first               Favors second")
+    vp.layout <- function(x, y) viewport(layout.pos.row=x, layout.pos.col=y)
+    arrange_ggplot2 <- function(..., nrow=NULL, ncol=NULL, as.table=FALSE) {
+      dots <- list(...)
+      n <- length(dots)
+      if(is.null(nrow) & is.null(ncol)) { nrow = floor(n/2) ; ncol = ceiling(n/nrow)}
+      if(is.null(nrow)) { nrow = ceiling(n/ncol)}
+      if(is.null(ncol)) { ncol = ceiling(n/nrow)}
+      ## NOTE see n2mfrow in grDevices for possible alternative
+      grid.newpage()
+      pushViewport(viewport(layout=grid.layout(nrow,ncol) ) )
+      ii.p <- 1
+      for(ii.row in seq(1, nrow)){
+        ii.table.row <- ii.row	
+        if(as.table) {ii.table.row <- nrow - ii.table.row + 1}
+        for(ii.col in seq(1, ncol)){
+          ii.table <- ii.p
+          if(ii.p > n) break
+          print(dots[[ii.table]], vp=vp.layout(ii.table.row, ii.col))
+          ii.p <- ii.p + 1
+        }
       }
     }
+    
+    p1=ggplot(Effects)+
+      geom_point(aes(Effects$DirTE,Effects$steps))
+    p1=p1+geom_line(data=ForReapPlot,aes(DirRCI,StepsForPlot,group=StepsForPlot),colour="blue")
+    p1=p1+geom_line(data=ForReapPlot,aes(DirCI,StepsForPlot,group=StepsForPlot))
+    p1=p1+geom_vline(xintercept = 0)
+    p1=p1 +labs(title=comparison,x =" ", y = " ")
+    p1=p1 + theme(axis.title.y=element_blank(),
+                  axis.text.y=element_blank(),
+                  axis.ticks.y=element_blank())
+    p2=ggplot(Effects)+
+      geom_point(aes(Effects$NetwTE,Effects$steps))
+    p2=p2+geom_line(data=ForReapPlot,aes(NetwRCI,StepsForPlot,group=StepsForPlot),colour="red")
+    p2=p2+geom_line(data=ForReapPlot,aes(NetwCI,StepsForPlot,group=StepsForPlot))
+    p2=p2+geom_vline(xintercept = 0)
+    p2=p2 +labs(title=comparison,x =" ", y = " ")
+    p2=p2 + theme(axis.title.y=element_blank(),
+                  axis.text.y=element_blank(),
+                  axis.ticks.y=element_blank())
+    
+    p=(arrange_ggplot2(p1,p2,nrow=1))
     }
   if(evidence=="both.together"){
-    plot(c(-3,3), c(-length(DirectTE),0), type = "n", xlab = " ", ylab = " ", asp = asp, xlim=c(-3,3), ylim=c(-length(DirectTE),0))
-    par(new=TRUE)
-
-    for (i in 1:length(DirectTE)){
-      points(c(DirectLRCI[i],DirectURCI[i]),c(-i,-i),type="l", lty=2, lwd=0.1, col="black")
-      points(c(DirectLCI[i],DirectUCI[i]),c(-i,-i),type="l", lwd=0.1, col="blue")
-      points(DirectTE[i],(-i), col="black", cex=0.2, lwd=0.1, type="p")
-      points(c(NetworkLRCI[i],NetworkURCI[i]),c(-i-0.2,-i-0.2),type="l", lty=2, lwd=0.1, col="black")
-      points(c(NetworkLCI[i],NetworkUCI[i]),c(-i-0.2,-i-0.2),type="l", lwd=0.1, col="red")
-      points(NetworkTE[i],(-i-0.2), col="black", cex=0.2, type="p", lwd=0.1)
-    }
-    abline(v=0)
-    axis(1, at = seq(-1, 1, by = 1))
-    if (is.na(outcome)){
-      title(comparison)
-    }
-    if (!is.na(outcome)){
-      if(outcome=="beneficial"){
-        title(comparison, sub="Favors second              Favors first")
-
-      }
-      if(outcome=="harmful"){
-        title(comparison, sub="Favors first               Favors second")
-      }
-    }
+    p=ggplot(Effects)+
+      geom_point(aes(Effects$DirTE,Effects$steps))
+    p=p+geom_line(data=ForReapPlot,aes(DirRCI,StepsForPlot,group=StepsForPlot),colour="blue")
+    p=p+geom_line(data=ForReapPlot,aes(DirCI,StepsForPlot,group=StepsForPlot))
+    p=p+geom_point(aes(Effects$NetwTE,Effects$steps0))
+    p=p+geom_line(data=ForReapPlot,aes(NetwRCI,StepsForPlot0,group=StepsForPlot0),colour="red")
+    p=p+geom_line(data=ForReapPlot,aes(NetwCI,StepsForPlot0,group=StepsForPlot0))
+    p=p+geom_vline(xintercept = 0)
+    p=p +labs(title=comparison,
+              x =" ", y = " ")
+    p=p + theme(axis.title.y=element_blank(),
+                axis.text.y=element_blank(),
+                axis.ticks.y=element_blank())
   }
   p
 }
