@@ -1,4 +1,4 @@
-##
+##repeated confidence intervals plot
 rm(list=ls())
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/sequentialnma.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/fordelta.R')
@@ -7,32 +7,63 @@ source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/formatdata.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/main.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/rci.R')
 
+library(readr)
 test <- read_delim("C:/Users/nikolakopoulou/Desktop/test.csv", 
                    ";", escape_double = FALSE, trim_ws = TRUE)
 test=as.data.frame(test)
 testseq <- sequentialnma(data=test, perarm=TRUE, type="binary", sm="OR", tau.preset = sqrt(0.014), 
-comb.fixed=F, comb.random=T,
-studlab="id",sortvar="year")
+comb.fixed=F, comb.random=T,studlab="id",sortvar="year")
 
 repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values="good")
 repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="network",small.values="good")
 repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="both.separate",small.values="good")
 repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="both.together",small.values="good")
+repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values="bad")
+repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="network",small.values="bad")
+repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="both.separate",small.values="bad")
+repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="both.together",small.values="bad")
+repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values=NA)
+repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="network",small.values=NA)
+repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="both.separate",small.values=NA)
+repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="both.together",small.values=NA)
+
+##stopping framework plot
+rm(list=ls())
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/sequentialnma.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/fordelta.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/alpha.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/formatdata.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/main.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/rci.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/plot.sequentialnma.R')
+
+library(readr)
+test <- read_delim("C:/Users/nikolakopoulou/Desktop/test.csv", 
+                   ";", escape_double = FALSE, trim_ws = TRUE)
+test=as.data.frame(test)
+testseq <- sequentialnma(data=test, perarm=TRUE, type="binary", sm="OR", tau.preset = sqrt(0.014), 
+                         comb.fixed=F, comb.random=T,studlab="id",sortvar="year")
+
+
+plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values=NA) 
+plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values="good") 
+plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values="bad") 
+plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="network",small.values=NA) 
+plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="network",small.values="good") 
+plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="network",small.values="bad") 
+plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="both",small.values=NA) 
+plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="both",small.values="good") 
+plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="both",small.values="bad") 
+
+plot(seqnmaobject=testseq,comparison="A:B",evidence="both",small.values="bad") 
 
 
 
 
-#if (is.na(outcome)){
-title(comparison)
-}
-#if (!is.na(outcome)){
-if(outcome=="beneficial"){
-  title(comparison, sub="Favors second              Favors first")
-  
-}
-if(outcome=="harmful"){
-  title(comparison, sub="Favors first               Favors second")
-}
+
+
+
+
 
 
 

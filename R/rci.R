@@ -3,7 +3,7 @@
 # This function draws a forest plot with repeated confidence intervals
 # in the active graphics window for pairwise and network meta-analysis.
 
-repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
+repeatedCI<-function(seqnmaobject,comparison,evidence,small.values=NA){
 
   library(ggplot2)
   library(grid)
@@ -59,6 +59,7 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
     p=p + theme(axis.title.y=element_blank(),
                 axis.text.y=element_blank(),
                 axis.ticks.y=element_blank())
+
   }
   if(evidence=="network"){
     p=ggplot(Effects)+
@@ -71,6 +72,7 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
     p=p + theme(axis.title.y=element_blank(),
                 axis.text.y=element_blank(),
                 axis.ticks.y=element_blank())
+
     }
   if(evidence=="both.separate"){
     vp.layout <- function(x, y) viewport(layout.pos.row=x, layout.pos.col=y)
@@ -105,6 +107,7 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
     p1=p1 + theme(axis.title.y=element_blank(),
                   axis.text.y=element_blank(),
                   axis.ticks.y=element_blank())
+    
     p2=ggplot(Effects)+
       geom_point(aes(Effects$NetwTE,Effects$steps))
     p2=p2+geom_line(data=ForReapPlot,aes(NetwRCI,StepsForPlot,group=StepsForPlot),colour="red")
@@ -114,7 +117,6 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
     p2=p2 + theme(axis.title.y=element_blank(),
                   axis.text.y=element_blank(),
                   axis.ticks.y=element_blank())
-    
     p=(arrange_ggplot2(p1,p2,nrow=1))
     }
   if(evidence=="both.together"){
@@ -126,11 +128,57 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values="good"){
     p=p+geom_line(data=ForReapPlot,aes(NetwRCI,StepsForPlot0,group=StepsForPlot0),colour="red")
     p=p+geom_line(data=ForReapPlot,aes(NetwCI,StepsForPlot0,group=StepsForPlot0))
     p=p+geom_vline(xintercept = 0)
-    p=p +labs(title=comparison,
-              x =" ", y = " ")
-    p=p + theme(axis.title.y=element_blank(),
-                axis.text.y=element_blank(),
-                axis.ticks.y=element_blank())
+    p=p +labs(title=comparison,x =" ", y = " ")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
   }
-  p
+  if(!is.na(small.values) && small.values=="good" && evidence!="both.separate"){
+    p=p +labs(caption  = (paste("Favors",strsplit(comparison,split=":")[[1]][2],sep = " ")))
+    
+    # Generate a ggplot2 plot grob
+    pfin <- ggplotGrob(p)
+    # Find the grob tree containing the right caption (as child)
+    k <- which(pfin$layout$name=="caption")
+    # Copy the "right caption" text grob in grbTxt
+    grbTxt <- pfin$grobs[[k]]$children[[1]]
+    
+    # Modify content and position of the text grob  
+    grbTxt$label <- paste("Favors",strsplit(comparison,split=":")[[1]][1],sep = " ")
+    grbTxt$name <- "GRID.text.left"
+    grbTxt$x <- unit(0,"npc")
+    grbTxt$hjust <- 0
+    grbTxt$gp$col <- "black"
+    
+    # Add grbTxt (left caption) to the title grob containing the right caption
+    pfin$grobs[[k]] <- addGrob(pfin$grobs[[k]],grbTxt)
+    grid.draw(pfin)
+  }
+  else if(!is.na(small.values) && small.values=="bad" && evidence!="both.separate"){
+    p=p +labs(caption  = (paste("Favors",strsplit(comparison,split=":")[[1]][1],sep = " ")))
+    
+    # Generate a ggplot2 plot grob
+    pfin <- ggplotGrob(p)
+    # Find the grob tree containing the right caption (as child)
+    k <- which(pfin$layout$name=="caption")
+    # Copy the "right caption" text grob in grbTxt
+    grbTxt <- pfin$grobs[[k]]$children[[1]]
+    
+    # Modify content and position of the text grob  
+    grbTxt$label <- paste("Favors",strsplit(comparison,split=":")[[1]][2],sep = " ")
+    grbTxt$name <- "GRID.text.left"
+    grbTxt$x <- unit(0,"npc")
+    grbTxt$hjust <- 0
+    grbTxt$gp$col <- "black"
+    
+    # Add grbTxt (left caption) to the title grob containing the right caption
+    pfin$grobs[[k]] <- addGrob(pfin$grobs[[k]],grbTxt)
+    grid.draw(pfin)
+  }
+  else if(is.na(small.values) | evidence=="both.separate"){pfin=p}
+  pfin
 }
+
+
+
+
