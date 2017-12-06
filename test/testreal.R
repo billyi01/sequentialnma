@@ -44,7 +44,6 @@ test=as.data.frame(test)
 testseq <- sequentialnma(data=test, perarm=TRUE, type="binary", sm="OR", tau.preset = sqrt(0.014), 
                          comb.fixed=F, comb.random=T,studlab="id",sortvar="year")
 
-
 plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values=NA) 
 plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values="good") 
 plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values="bad") 
