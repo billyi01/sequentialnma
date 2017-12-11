@@ -1,4 +1,6 @@
-#checks and formats and orders data according to sortvar
+#A function to check,  format and order data according to sortvar
+#data: the inputed dataset in sequentialnma function
+#args: the defined arguments
 formatdata=function (data,args)
 {
   perarm=as.logical(as.character(args$perarm))

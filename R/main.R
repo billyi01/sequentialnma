@@ -1,10 +1,13 @@
+#A function that calculates the sequential quantities and boundaries at each step of the analysis
+#the input is a subset of the sequentialnma arguments apart from the delta argument which is inputed by fordelta function
+
 main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixed=F, comb.random=T,delta=NA){
   
   #perform network meta-analysis
   if (perarm & type=="binary"){
     Dpairs=pairwise(treat=t,event=r,n=n, data=data, studlab = id, sm= sm)
     checkconn=netconnection(treat1,treat2,studlab,data=Dpairs)
-    if (checkconn$n.subnets==1 && checkconn$m>1){
+    if (checkconn$n.subnets==1){
       metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
                         comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
     }
@@ -13,7 +16,7 @@ main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixe
   if (perarm & type=="continuous"){
     Dpairs=pairwise(treat=t,mean=y,sd=sd,n=n,data=data, studlab =id, sm=sm)
     checkconn=netconnection(treat1,treat2,studlab,data=Dpairs)
-    if (checkconn$n.subnets==1 && checkconn$m>1){
+    if (checkconn$n.subnets==1){
     metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
                       comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
     }
@@ -21,13 +24,13 @@ main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixe
   
   if (!perarm){
     checkconn=netconnection(t1,t2,studlab=id,data=data)
-    if (checkconn$n.subnets==1 && checkconn$m>1){
+    if (checkconn$n.subnets==1){
     metaNetw=netmeta(TE,seTE,t1,t2,studlab=id,data=data,sm=sm,
                      comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
     }
   }
   
-  if (checkconn$n.subnets==1 && checkconn$m>1){
+  if (checkconn$n.subnets==1){
   #store pairwise and network meta-analysis results
   sideSplit=netsplit(metaNetw)
   
@@ -59,22 +62,21 @@ main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixe
                        "NetworkTE","NetworkSE","NetworkL","NetworkU")
   input=as.data.frame(input)
   
-  #anticipated effect size equal to final nma
+  #set anticipated effect size equal to final nma as estimated from fordelta function
   delta=as.data.frame(delta)
   delta = delta[rownames(input),]
-  #delta=Filter(delta
-  #z scores and accumulated information
+  #calculate z scores and accumulated information
   Zpairw = input$DirectTE/input$DirectSE
   Ipairw = 1/input$DirectSE
   Zntw <- input$NetworkTE/input$NetworkSE
   Intw <- 1/input$NetworkSE
-  #maximum required information
+  #maximum required information, consider putting alpha and beta as arguments
   ImaxPairw = ImaxNMA = abs((-qnorm(0.05/(2), 0, 1, lower.tail = TRUE,log.p = FALSE) 
                       + qnorm(1 - 0.1, 0, 1, lower.tail = TRUE, log.p = FALSE))/(delta))
   #fraction of accumulated information
   tallPairw = Ipairw/ImaxPairw
   tallNMA = Intw/ImaxNMA
-  #calculation of sequential boundaries
+  #calculation of sequential boundaries using alpha function
   SeqEffPairw = alpha(method = "BF", t = tallPairw)
   SeqEffNMA = alpha(method = "BF", t = tallNMA)
   AtPairw = SeqEffPairw[, 2]

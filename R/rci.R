@@ -2,6 +2,11 @@
 #
 # This function draws a forest plot with repeated confidence intervals
 # in the active graphics window for pairwise and network meta-analysis.
+# seqnmaobject: An object of class sequentialnma
+# comparison: A character string defining the comparison for which the stopping framework is to be drawn. 
+# evidence: A character string to indicate whether the stopping framework 
+# should be drawn based on "pairwise", "network", "both.separate" or "both.together" evidence.
+# small.values: A character string specifying whether small treatment effects indicate a "good" or "bad" effect
 
 repeatedCI<-function(seqnmaobject,comparison,evidence,small.values=NA){
 

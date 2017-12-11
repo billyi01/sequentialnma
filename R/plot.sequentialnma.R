@@ -1,3 +1,13 @@
+# Stopping framework for pairwise and network meta-analysis
+#
+# This function draws the panel with z-scores and stopping boundaries
+# in the active graphics window for pairwise and network meta-analysis.
+# seqnmaobject: An object of class sequentialnma
+# comparison: A character string defining the comparison for which the stopping framework is to be drawn. 
+# evidence: A character string to indicate whether the stopping framework 
+# should be drawn based on "pairwise", "network" or "both" evidence.
+# small.values: A character string specifying whether small treatment effects indicate a "good" or "bad" effect
+
 plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA) 
 {
   library(ggplot2)
@@ -19,7 +29,6 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
   NetworkEfficacyB = unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkBoundary"])},
                                    1:length(seqnmaobject$result)))
 
-  
   ForStopFramPlot=data.frame(DirectZscore,NetworkZscore,DirectT,NetworkT,DirectEfficacyB,NetworkEfficacyB)
   
   ############################stopping framework################################

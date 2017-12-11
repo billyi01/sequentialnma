@@ -1,4 +1,13 @@
-#test data input
+#In part A of this script we test that old and new functions give the same results
+#In part B we draw the stopping frameworks and the repeated confidence intervals forest plots using the new function
+
+########################################################
+#########################PART A#########################
+########################################################
+
+#load old and new functions
+#these are the 7 functions in sequentialnma2
+#I load them with source because the old one is named sequentialnma as well
 rm(list=ls())
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/sequentialnma.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/fordelta.R')
@@ -8,13 +17,19 @@ source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/main.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/rci.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/plot.sequentialnma.R')
 
-####test arm level binary
+#load the old functions
+install_github("esm-ispm-unibe-ch/sequentialnma")
+library(sequentialnma)
+
+########################################################
+########test 1st dataset - named "test"#################
+########################################################
+
 library(readr)
 test <- read_delim("C:/Users/nikolakopoulou/Desktop/test.csv", 
                    ";", escape_double = FALSE, trim_ws = TRUE)
 test=as.data.frame(test)
-install_github("esm-ispm-unibe-ch/sequentialnma")
-library(sequentialnma)
+
 
 testarmbinary=function(data){
   testseq <- sequentialnma(data=test, perarm=TRUE, type="binary", sm="OR", tau.preset = sqrt(0.014), 
@@ -64,7 +79,11 @@ testarmbinary=function(data){
 
 testarmbinary(data = test)
 
-#test subset of Leucht
+########################################################
+########test 2nd dataset - named "Leuchtsmall"##########
+########################################################
+
+#test subset of Leucht, named Leucht small
 library(readr)
 Leuchtsmall <- read_delim("C:/Users/nikolakopoulou/Desktop/Leuchtsmall.csv", 
                           ";", escape_double = FALSE, trim_ws = TRUE)
@@ -120,7 +139,10 @@ testivcontinuous=function(data){
 
 testivcontinuous(Leuchtsmall)
 
-####plots for test arm level binary
+########################################################
+#########################PART B#########################
+########################################################
+#delete everything and reload new functions
 rm(list=ls())
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/sequentialnma.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/fordelta.R')
@@ -129,6 +151,11 @@ source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/formatdata.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/main.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/rci.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/plot.sequentialnma.R')
+
+##################################################################
+########draw plots for 1st dataset - named "test"#################
+##################################################################
+
 library(readr)
 test <- read_delim("C:/Users/nikolakopoulou/Desktop/test.csv", 
                    ";", escape_double = FALSE, trim_ws = TRUE)
@@ -158,7 +185,10 @@ plot(seqnmaobject=testseq,comparison="A:B",evidence="both",small.values=NA)
 plot(seqnmaobject=testseq,comparison="A:B",evidence="both",small.values="good") 
 plot(seqnmaobject=testseq,comparison="A:B",evidence="both",small.values="bad") 
 
-#plots for subset of Leucht
+##################################################################
+########draw plots for 2nd dataset - named "Leuchtsmall"##########
+##################################################################
+
 Leuchtsmall <- read_delim("C:/Users/nikolakopoulou/Desktop/Leuchtsmall.csv", 
                           ";", escape_double = FALSE, trim_ws = TRUE)
 Leuchtsmall=as.data.frame(Leuchtsmall)

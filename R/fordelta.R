@@ -1,3 +1,6 @@
+#A function that performs NMA to the final step of the sequential process (entire dataset)
+#and sets the anticipated treatment effect equal to final NMA estimates
+#the input is a subset of the sequentialnma arguments
 fordelta <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixed=F, comb.random=T){
   
   #perform network meta-analysis
@@ -22,7 +25,7 @@ fordelta <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.
     if (comb.fixed){TE.nma=metaNetw$TE.fixed[lower.tri(metaNetw$TE.fixed)]}
     if (comb.random) {TE.nma=metaNetw$TE.random[lower.tri(metaNetw$TE.random)]}
     
-    #anticipated effect size equal to final nma
+    #set anticipated effect size equal to final nma
   sideSplit=netsplit(metaNetw)
   delta=as.data.frame(TE.nma)
   rownames(delta) <- c(sideSplit$comparison)  

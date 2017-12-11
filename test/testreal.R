@@ -1,33 +1,10 @@
-##repeated confidence intervals plot
-rm(list=ls())
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/sequentialnma.R')
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/fordelta.R')
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/alpha.R')
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/formatdata.R')
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/main.R')
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/rci.R')
+######################################
+###########test Leucht################
+######################################
 
-library(readr)
-test <- read_delim("C:/Users/nikolakopoulou/Desktop/test.csv", 
-                   ";", escape_double = FALSE, trim_ws = TRUE)
-test=as.data.frame(test)
-testseq <- sequentialnma(data=test, perarm=TRUE, type="binary", sm="OR", tau.preset = sqrt(0.014), 
-comb.fixed=F, comb.random=T,studlab="id",sortvar="year")
-
-repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values="good")
-repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="network",small.values="good")
-repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="both.separate",small.values="good")
-repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="both.together",small.values="good")
-repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values="bad")
-repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="network",small.values="bad")
-repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="both.separate",small.values="bad")
-repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="both.together",small.values="bad")
-repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values=NA)
-repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="network",small.values=NA)
-repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="both.separate",small.values=NA)
-repeatedCI(seqnmaobject=testseq,comparison="A:B",evidence="both.together",small.values=NA)
-
-##stopping framework plot
+#load old and new functions
+#these are the 7 functions in sequentialnma2
+#I load them with source because the old one is named sequentialnma as well
 rm(list=ls())
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/sequentialnma.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/fordelta.R')
@@ -38,59 +15,26 @@ source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/rci.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/plot.sequentialnma.R')
 
 library(readr)
-test <- read_delim("C:/Users/nikolakopoulou/Desktop/test.csv", 
-                   ";", escape_double = FALSE, trim_ws = TRUE)
-test=as.data.frame(test)
-testseq <- sequentialnma(data=test, perarm=TRUE, type="binary", sm="OR", tau.preset = sqrt(0.014), 
-                         comb.fixed=F, comb.random=T,studlab="id",sortvar="year")
-
-plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values=NA) 
-plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values="good") 
-plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="pairwise",small.values="bad") 
-plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="network",small.values=NA) 
-plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="network",small.values="good") 
-plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="network",small.values="bad") 
-plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="both",small.values=NA) 
-plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="both",small.values="good") 
-plot.sequentialnma(seqnmaobject=testseq,comparison="A:B",evidence="both",small.values="bad") 
-
-plot(seqnmaobject=testseq,comparison="A:B",evidence="both",small.values="bad") 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-data(Leucht)
-leuchtseq <- sequentialnma(data=Leucht, perarm=FALSE, type="continuous", sm="SMD", tau.preset = 0.2213594, 
+LeuchtID <- read_delim("C:/Users/nikolakopoulou/Desktop/LeuchtID.csv", 
+                       ";", escape_double = FALSE, trim_ws = TRUE)
+#View(LeuchtID)
+leuchtseq1 <- sequentialnma(data=LeuchtID, perarm=FALSE, type="continuous", sm="SMD", tau.preset = 0.2213594, 
                            comb.fixed=F, comb.random=T,
                            studlab="id",sortvar="year", TE="effect", seTE="se",
                            t1="treat1", t2="treat2")
 
 install_github("esm-ispm-unibe-ch/sequentialnma")
 library(sequentialnma)
-y<-livenma(data=Leucht, level="study",type="continuous",effsize="SMD",tau.sq=0.049,delta=NA)
+y<-livenma(data=LeuchtID, level="study",type="continuous",effsize="SMD",tau.sq=0.049,delta=NA)
 
 #check last step of leucht
 y$output[y$output$ComparisonNetw=="HAL vs OLA",]
-leuchtseq$laststep$output["HAL:OLA",]
+leuchtseq1$laststep$output["HAL:OLA",]
 
-#check 3 steps before then end leucht
-test3fromend=as.data.frame(y$Prosp[68,,100])
-rownames(test3fromend)=colnames(y$output)
+#this is figure 1 of main manuscript
+plot(seqnmaobject=leuchtseq1,comparison="HAL:OLA",evidence="both",small.values=NA) 
 
-leuchtseq$result[[100]]$output["HAL:OLA",]
-
+#results with old and new function
 DirectZscore1 = as.vector(y$Prosp[68, 8, 1:(max(y$D$idyear) -1)], mode = "numeric")
 NetworkZscore1 = as.vector(y$Prosp[68, 10, 1:(max(y$D$idyear) - 1)], mode = "numeric")
 DirectT1 = as.vector(y$Prosp[68, 12, 1:(max(y$D$idyear) - 1)], mode = "numeric")
@@ -98,23 +42,20 @@ NetworkT1 = as.vector(y$Prosp[68, 13, 1:(max(y$D$idyear) - 1)], mode = "numeric"
 DirectEfficacyB1 = as.vector(y$Prosp[68, 15, 1:(max(y$D$idyear) - 1)], mode = "numeric")
 NetworkEfficacyB1 = as.vector(y$Prosp[68, 17, 1:(max(y$D$idyear) - 1)], mode = "numeric")
 
-DirectZscore2 = unlist(mapply(function(i){(leuchtseq$result[[i]]$output["HAL:OLA","DirectZscore"])},
-                              1:length(leuchtseq$result)))
-NetworkZscore2 = unlist(mapply(function(i){(leuchtseq$result[[i]]$output["HAL:OLA","NetworkZscore"])},
-                               1:length(leuchtseq$result)))
-DirectT2 = unlist(mapply(function(i){(leuchtseq$result[[i]]$output["HAL:OLA","DirectTaccum"])},
-                         1:length(leuchtseq$result)))
-NetworkT2 = unlist(mapply(function(i){(leuchtseq$result[[i]]$output["HAL:OLA","NetworkTaccum"])},
-                          1:length(leuchtseq$result)))
-DirectEfficacyB2 = unlist(mapply(function(i){(leuchtseq$result[[i]]$output["HAL:OLA","DirectBoundary"])},
-                                 1:length(leuchtseq$result)))
-NetworkEfficacyB2 = unlist(mapply(function(i){(leuchtseq$result[[i]]$output["HAL:OLA","NetworkBoundary"])},
-                                  1:length(leuchtseq$result)))
+DirectZscore2 = unlist(mapply(function(i){(leuchtseq1$result[[i]]$output["HAL:OLA","DirectZscore"])},
+                              1:length(leuchtseq1$result)))
+NetworkZscore2 = unlist(mapply(function(i){(leuchtseq1$result[[i]]$output["HAL:OLA","NetworkZscore"])},
+                               1:length(leuchtseq1$result)))
+DirectT2 = unlist(mapply(function(i){(leuchtseq1$result[[i]]$output["HAL:OLA","DirectTaccum"])},
+                         1:length(leuchtseq1$result)))
+NetworkT2 = unlist(mapply(function(i){(leuchtseq1$result[[i]]$output["HAL:OLA","NetworkTaccum"])},
+                          1:length(leuchtseq1$result)))
+DirectEfficacyB2 = unlist(mapply(function(i){(leuchtseq1$result[[i]]$output["HAL:OLA","DirectBoundary"])},
+                                 1:length(leuchtseq1$result)))
+NetworkEfficacyB2 = unlist(mapply(function(i){(leuchtseq1$result[[i]]$output["HAL:OLA","NetworkBoundary"])},
+                                  1:length(leuchtseq1$result)))
 
-DiffNetwZscores=abs(unique(round(NetworkZscore2[!is.na(NetworkZscore2)],3)))-
-  abs(unique(round(NetworkZscore1[!is.na(NetworkZscore1)],3)))
-DiffDirZscores=abs(unique(round(DirectZscore2[!is.na(DirectZscore2)],3)))-
-  abs(unique(round(DirectZscore1[!is.na(DirectZscore1)],3)))
+
 
 ##test Dong
 #data(Dong)
