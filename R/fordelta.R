@@ -26,7 +26,7 @@ fordelta <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.
     if (comb.random) {TE.nma=metaNetw$TE.random[lower.tri(metaNetw$TE.random)]}
     
     #set anticipated effect size equal to final nma
-  sideSplit=netsplit(metaNetw)
+  sideSplit=netsplit(metaNetw)####!!!!!!!!!!!!!!!! auto giati xreizetai??? mono gia ta onomata ton comparisons? den einai ligo krima... einai argi function i netsplit
   delta=as.data.frame(TE.nma)
   rownames(delta) <- c(sideSplit$comparison)  
   

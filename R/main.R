@@ -71,20 +71,27 @@ main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixe
   Zntw <- input$NetworkTE/input$NetworkSE
   Intw <- 1/input$NetworkSE
   #maximum required information, consider putting alpha and beta as arguments
-  ImaxPairw = ImaxNMA = abs((-qnorm(0.05/(2), 0, 1, lower.tail = TRUE,log.p = FALSE) 
-                      + qnorm(1 - 0.1, 0, 1, lower.tail = TRUE, log.p = FALSE))/(delta))
+  # !!!!!!!!!!!!!!!!!!! shall be easy - at the moment you have a 5% power 90% right?
+  #!!!! i did minor changes
+  typeIerror=0.05
+  power=0.9
+  ImaxPairw = ImaxNMA = abs((-qnorm(typeIerror/2, 0, 1, lower.tail = TRUE,log.p = FALSE) ###!!!!!! nomizw ta  0, 1, lower.tail = TRUE,log.p = FALSE)  den xreiazontai
+                      + qnorm(power, 0, 1, lower.tail = TRUE, log.p = FALSE))/(delta))
   #fraction of accumulated information
   tallPairw = Ipairw/ImaxPairw
   tallNMA = Intw/ImaxNMA
+  
   #calculation of sequential boundaries using alpha function
-  SeqEffPairw = alpha(method = "BF", t = tallPairw)
+##!!!!!!!!! afou stin alpha exeis balei mesa kai ta alla option oxi mono BF giati dne to exeis to BF argument?
+    SeqEffPairw = alpha(method = "BF", t = tallPairw)
   SeqEffNMA = alpha(method = "BF", t = tallNMA)
-  AtPairw = SeqEffPairw[, 2]
+  AtPairw = SeqEffPairw[, 2]##!!!!!!!!! perita, des parakatw
   EbPairw = SeqEffPairw[, 3]
   AtNMA = SeqEffNMA[, 2]
   EbNMA = SeqEffNMA[, 3]
   #repeated confidence intervals
   LrciPairw = input$DirectTE - EbPairw * input$DirectSE
+  #!!!! kalutera LrciPairw = input$DirectTE - eqEffPairw$E * input$DirectSE kai ta alla parakatw omoiws
   UrciPairw = input$DirectTE + EbPairw * input$DirectSE
   LrciNMA = input$NetworkTE - EbNMA * input$NetworkSE
   UrciNMA = input$NetworkTE + EbNMA * input$NetworkSE
@@ -99,7 +106,11 @@ main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixe
                         "DirectBoundary", "NetworkAlpha", "NetworkBoundary", 
                         "DirectLowerRCI", "DirectUpperRCI", "NetworkLowerRCI", 
                         "NetworkUpperRCI")
-  return(list(output=output))
+  ###!!!!!!!! gia na apofeugeis lathi stis antistoixiseis kalutera ta dyo parapanw commands na ta grapseis
+  ###!!!  output = cbind.data.frame(input,delta=delta,DirectZscore=Zpairw,DirectI= Ipairw......)
+  
+  
+  return(list(output=output))###!!!! den katalabainw giati na einai list?
   }
 }
 

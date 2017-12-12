@@ -1,13 +1,23 @@
-#A function to check,  format and order data according to sortvar
+
+#############################################################################
+#A function to check,  format and order NMA data according to sortvar
+#############################################################################
 #data: the inputed dataset in sequentialnma function
 #args: the defined arguments
+#!!!!!!!!!!! Define the arguments ???
 formatdata=function (data,args)
 {
   perarm=as.logical(as.character(args$perarm))
+  #sto epomeno giati den exei apla type=args["type"] gia na mhn trexeis nea function?
   getpar=function(field){
     return(args[field])
   }
   type=getpar("type")
+  
+  
+  ## !!!!!!!!! olo to epomeno mexri ta epomena thaumastika  tha mporouses na to kaneis me to 
+  ####  data$r = eval(substitute(r), data)
+  ####na min mperdeuomaste me ta onomata palia kai nea?
   
   #define correspondance between old and new names
   defaultargs = function (arg){
@@ -52,6 +62,8 @@ formatdata=function (data,args)
      return(out)
    },oldnames)
  )
+ 
+ ###!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   
  #function to check whether mandotory arguments exist in the data and stop otherwise
  checkarguments = function(nnames,mands){
