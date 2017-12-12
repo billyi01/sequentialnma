@@ -41,6 +41,10 @@ DirectT1 = as.vector(y$Prosp[68, 12, 1:(max(y$D$idyear) - 1)], mode = "numeric")
 NetworkT1 = as.vector(y$Prosp[68, 13, 1:(max(y$D$idyear) - 1)], mode = "numeric")
 DirectEfficacyB1 = as.vector(y$Prosp[68, 15, 1:(max(y$D$idyear) - 1)], mode = "numeric")
 NetworkEfficacyB1 = as.vector(y$Prosp[68, 17, 1:(max(y$D$idyear) - 1)], mode = "numeric")
+DirectTE1 = as.vector(y$Prosp[68, 2, 1:(max(y$D$idyear) - 1)], mode = "numeric")
+NetworkTE1 = as.vector(y$Prosp[68, 5, 1:(max(y$D$idyear) - 1)], mode = "numeric")
+DirectseTE1 = as.vector(y$Prosp[68, 3, 1:(max(y$D$idyear) - 1)], mode = "numeric")
+NetworkseTE1 = as.vector(y$Prosp[68, 6, 1:(max(y$D$idyear) - 1)], mode = "numeric")
 
 DirectZscore2 = unlist(mapply(function(i){(leuchtseq1$result[[i]]$output["HAL:OLA","DirectZscore"])},
                               1:length(leuchtseq1$result)))
@@ -55,36 +59,50 @@ DirectEfficacyB2 = unlist(mapply(function(i){(leuchtseq1$result[[i]]$output["HAL
 NetworkEfficacyB2 = unlist(mapply(function(i){(leuchtseq1$result[[i]]$output["HAL:OLA","NetworkBoundary"])},
                                   1:length(leuchtseq1$result)))
 
+DirectTE2 = unlist(mapply(function(i){(leuchtseq1$result[[i]]$output["HAL:OLA","DirectTE"])},
+                                 1:length(leuchtseq1$result)))
+NetworkTE2 = unlist(mapply(function(i){(leuchtseq1$result[[i]]$output["HAL:OLA","NetworkTE"])},
+                                  1:length(leuchtseq1$result)))
+DirectseTE2 = unlist(mapply(function(i){(leuchtseq1$result[[i]]$output["HAL:OLA","DirectSE"])},
+                          1:length(leuchtseq1$result)))
+NetworkseTE2 = unlist(mapply(function(i){(leuchtseq1$result[[i]]$output["HAL:OLA","NetworkSE"])},
+                           1:length(leuchtseq1$result)))
 
 
-##test Dong
+######################################
+###########test Dong################
+######################################
 #data(Dong)
 library(readr)
-Dong <- read_delim("C:/Users/nikolakopoulou/Desktop/Dong.csv", 
+Dong05 <- read_delim("C:/Users/nikolakopoulou/Desktop/Dong05.csv", 
                    ";", escape_double = FALSE, trim_ws = TRUE)
-#View(Dong)
 
-
-Dongseq <- sequentialnma(data=Dong, perarm=TRUE, type="binary", sm="OR", tau.preset = 0.1183216, 
+Dongseq <- sequentialnma(data=Dong05, perarm=TRUE, type="binary", sm="OR", tau.preset = 0.1183216, 
                          comb.fixed=F, comb.random=T,
                          studlab="id",sortvar="year")
 
 install_github("esm-ispm-unibe-ch/sequentialnma")
 library(sequentialnma)
-x<-livenma(data=Dong, level="arm",type="binary",effsize="OR",tau.sq=0.014,delta=NA)
+Dong05=as.data.frame(Dong05)
+
+x<-livenma(data=Dong05, level="arm",type="binary",effsize="OR",tau.sq=0.014,delta=NA)
 
 #check last step of dong
 x$output[x$output$ComparisonNetw=="ICS vs LABA-ICS",]
 Dongseq$laststep$output["ICS:LABA-ICS",]
 
 ###
-
+#results with old and new function
 DirectZscore1 = as.vector(x$Prosp[2, 8, 1:(max(x$D$idyear) -1)], mode = "numeric")
 NetworkZscore1 = as.vector(x$Prosp[2, 10, 1:(max(x$D$idyear) - 1)], mode = "numeric")
 DirectT1 = as.vector(x$Prosp[2, 12, 1:(max(x$D$idyear) - 1)], mode = "numeric")
 NetworkT1 = as.vector(x$Prosp[2, 13, 1:(max(x$D$idyear) - 1)], mode = "numeric")
 DirectEfficacyB1 = as.vector(x$Prosp[2, 15, 1:(max(x$D$idyear) - 1)], mode = "numeric")
 NetworkEfficacyB1 = as.vector(x$Prosp[2, 17, 1:(max(x$D$idyear) - 1)], mode = "numeric")
+DirectTE1 = as.vector(y$Prosp[2, 2, 1:(max(y$D$idyear) - 1)], mode = "numeric")
+NetworkTE1 = as.vector(y$Prosp[2, 5, 1:(max(y$D$idyear) - 1)], mode = "numeric")
+DirectseTE1 = as.vector(y$Prosp[2, 3, 1:(max(y$D$idyear) - 1)], mode = "numeric")
+NetworkseTE1 = as.vector(y$Prosp[2, 6, 1:(max(y$D$idyear) - 1)], mode = "numeric")
 
 DirectZscore2 = unlist(mapply(function(i){(Dongseq$result[[i]]$output["ICS:LABA-ICS","DirectZscore"])},
                               1:length(Dongseq$result)))
@@ -98,9 +116,17 @@ DirectEfficacyB2 = unlist(mapply(function(i){(Dongseq$result[[i]]$output["ICS:LA
                                  1:length(Dongseq$result)))
 NetworkEfficacyB2 = unlist(mapply(function(i){(Dongseq$result[[i]]$output["ICS:LABA-ICS","NetworkBoundary"])},
                                   1:length(Dongseq$result)))
+DirectTE2 = unlist(mapply(function(i){(Dongseq$result[[i]]$output["ICS:LABA-ICS","DirectTE"])},
+                          1:length(Dongseq$result)))
+NetworkTE2 = unlist(mapply(function(i){(Dongseq$result[[i]]$output["ICS:LABA-ICS","NetworkTE"])},
+                           1:length(Dongseq$result)))
+DirectseTE2 = unlist(mapply(function(i){(Dongseq$result[[i]]$output["ICS:LABA-ICS","DirectSE"])},
+                            1:length(Dongseq$result)))
+NetworkseTE2 = unlist(mapply(function(i){(Dongseq$result[[i]]$output["ICS:LABA-ICS","NetworkSE"])},
+                             1:length(Dongseq$result)))
+
+#sequential framework and repeated forest plot with both, compare with appendix figures
+plot(seqnmaobject=Dongseq,comparison="ICS:LABA-ICS",evidence="both",small.values=NA) 
+repeatedCI(seqnmaobject=Dongseq,comparison="ICS:LABA-ICS",evidence="both.separate",small.values=NA) 
 
 
-DiffNetwZscores=abs(unique(round(NetworkZscore2[!is.na(NetworkZscore2)],3)))-
-  abs(unique(round(NetworkZscore1[!is.na(NetworkZscore1)],3)))
-DiffDirZscores=abs(unique(round(DirectZscore2[!is.na(DirectZscore2)],3)))-
-  abs(unique(round(DirectZscore1[!is.na(DirectZscore1)],3)))
