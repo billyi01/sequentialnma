@@ -1,25 +1,27 @@
-
 #############################################################################
 #A function to check,  format and order NMA data according to sortvar
 #############################################################################
 #data: the inputed dataset in sequentialnma function
-#args: the defined arguments
-#!!!!!!!!!!! Define the arguments ???
+#args: the defined arguments in sequentialnma
+  #data: a dataset in which the following arguments can be found: sortvar, studyid, t (or t1 and t2),
+  #n and r for binary outcomes, y, sd and n for continuous outcomes, TE and seTE for inverse variance data.
+  #perarm: a logical value indicating whether data are given as one treatment arm per row. 
+  #If TRUE the pairwise command is used to produce a dataset with one comparison per row.
+  #type: a character value indicating the type of the measured outcome, e.g. "binary", "continuous".
+  #sm: a character string indicating underlying summary measure, e.g. "OR", "RR", "RD", "MD", "SMD".
+  #tau.preset: an optional value for the square-root of the between-study variance τ^2. 
+  #If not specified heterogeneity is re-estimated at each step from the data.
+  #comb.fixed: A logical indicating whether a fixed effect meta-analysis should be conducted.
+  #comb.random: A logical indicating whether a random effects meta-analysis should be conducted.
 formatdata=function (data,args)
 {
   perarm=as.logical(as.character(args$perarm))
-  #sto epomeno giati den exei apla type=args["type"] gia na mhn trexeis nea function?
   getpar=function(field){
     return(args[field])
   }
   type=getpar("type")
   
-  
-  ## !!!!!!!!! olo to epomeno mexri ta epomena thaumastika  tha mporouses na to kaneis me to 
-  ####  data$r = eval(substitute(r), data)
-  ####na min mperdeuomaste me ta onomata palia kai nea?
-  
-  #define correspondance between old and new names
+  #define correspondence between old and new names
   defaultargs = function (arg){
     switch(arg, "studlab" = "id"
            , "t" = "t"
@@ -63,8 +65,6 @@ formatdata=function (data,args)
    },oldnames)
  )
  
- ###!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  
  #function to check whether mandotory arguments exist in the data and stop otherwise
  checkarguments = function(nnames,mands){
    mapply(function(field){

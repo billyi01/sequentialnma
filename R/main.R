@@ -1,44 +1,47 @@
-#A function that calculates the sequential quantities and boundaries at each step of the analysis
+############################################################################################################
+##### A function that calculates the sequential quantities and boundaries at each step of the analysis #####
+############################################################################################################
 #the input is a subset of the sequentialnma arguments apart from the delta argument which is inputed by fordelta function
-
-main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixed=F, comb.random=T, delta=NA){
-  
+main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixed=F, comb.random=T, delta=NA,
+                 typeIerror=typeIerror, power=power, method=method){
   #perform network meta-analysis
   if (perarm & type=="binary"){
     Dpairs = suppressWarnings(
-        pairwisenowarn(treat=t,event=r,n=n, data=data, studlab = id, sm = sm, warn=F)
+        pairwise(treat=t,event=r,n=n, data=data, studlab = id, sm = sm, warn=F)
         )
       checkconn = netconnection(treat1,treat2,studlab,data=Dpairs)
     if (checkconn$n.subnets==1){
-      metaNetw = netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
+      metaNetw = suppressWarnings(netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
                          comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset
                         , warn = F)
+      )
     }
   } 
   
   if (perarm & type=="continuous"){
-    Dpairs=invisible(
+    Dpairs=suppressWarnings(
       pairwise(treat=t,mean=y,sd=sd,n=n,data=data, studlab =id, sm=sm)
     )
     checkconn=netconnection(treat1,treat2,studlab,data=Dpairs)
     if (checkconn$n.subnets==1){
-    metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
+    metaNetw= suppressWarnings(netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
                       comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
+    )
     }
   }
   
   if (!perarm){
     checkconn=netconnection(t1,t2,studlab=id,data=data)
     if (checkconn$n.subnets==1){
-    metaNetw=netmeta(TE,seTE,t1,t2,studlab=id,data=data,sm=sm,
+    metaNetw=suppressWarnings(netmeta(TE,seTE,t1,t2,studlab=id,data=data,sm=sm,
                      comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
+    )
     }
   }
   
   if (checkconn$n.subnets==1){
   #store pairwise and network meta-analysis results
   sideSplit=netsplit(metaNetw)
-  
   if (comb.fixed){
     Direct=sideSplit$direct.fixed$TE
     DirectSE=sideSplit$direct.fixed$seTE
@@ -66,7 +69,6 @@ main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixe
   colnames(input) <- c("DirectTE","DirectSE","DirectL","DirectU",
                        "NetworkTE","NetworkSE","NetworkL","NetworkU")
   input=as.data.frame(input)
-  
   #set anticipated effect size equal to final nma as estimated from fordelta function
   delta=as.data.frame(delta)
   delta = delta[rownames(input),]
@@ -75,47 +77,25 @@ main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixe
   Ipairw = 1/input$DirectSE
   Zntw <- input$NetworkTE/input$NetworkSE
   Intw <- 1/input$NetworkSE
-  #maximum required information, consider putting alpha and beta as arguments
-  # !!!!!!!!!!!!!!!!!!! shall be easy - at the moment you have a 5% power 90% right?
-  #!!!! i did minor changes
-  typeIerror=0.05
-  power=0.9
-  ImaxPairw = ImaxNMA = abs((-qnorm(typeIerror/2, 0, 1, lower.tail = TRUE,log.p = FALSE) ###!!!!!! nomizw ta  0, 1, lower.tail = TRUE,log.p = FALSE)  den xreiazontai
-                      + qnorm(power, 0, 1, lower.tail = TRUE, log.p = FALSE))/(delta))
+  ImaxPairw = ImaxNMA = abs((-qnorm(typeIerror/2)+ qnorm(power))/(delta))
   #fraction of accumulated information
   tallPairw = Ipairw/ImaxPairw
   tallNMA = Intw/ImaxNMA
-  
   #calculation of sequential boundaries using alpha function
-##!!!!!!!!! afou stin alpha exeis balei mesa kai ta alla option oxi mono BF giati dne to exeis to BF argument?
-  SeqEffPairw = alpha(method = "BF", t = tallPairw)
-  SeqEffNMA = alpha(method = "BF", t = tallNMA)
-  AtPairw = SeqEffPairw[, 2]##!!!!!!!!! perita, des parakatw
-  EbPairw = SeqEffPairw[, 3]
-  AtNMA = SeqEffNMA[, 2]
-  EbNMA = SeqEffNMA[, 3]
+  SeqEffPairw = alpha(method = method, t = tallPairw, typeIerror=typeIerror)
+  SeqEffNMA = alpha(method = method, t = tallNMA, typeIerror=typeIerror)
   #repeated confidence intervals
-  LrciPairw = input$DirectTE - EbPairw * input$DirectSE
-  #!!!! kalutera LrciPairw = input$DirectTE - eqEffPairw$E * input$DirectSE kai ta alla parakatw omoiws
-  UrciPairw = input$DirectTE + EbPairw * input$DirectSE
-  LrciNMA = input$NetworkTE - EbNMA * input$NetworkSE
-  UrciNMA = input$NetworkTE + EbNMA * input$NetworkSE
+  LrciPairw = input$DirectTE - SeqEffPairw$E * input$DirectSE
+  UrciPairw = input$DirectTE + SeqEffPairw$E * input$DirectSE
+  LrciNMA = input$NetworkTE - SeqEffNMA$E * input$NetworkSE
+  UrciNMA = input$NetworkTE + SeqEffNMA$E * input$NetworkSE
   #store sequential nma calculations together with nma results
-  output = data.frame(input,delta, Zpairw, Ipairw, Zntw, Intw, 
-                      tallPairw, tallNMA, AtPairw, EbPairw, AtNMA, EbNMA, 
-                      LrciPairw, UrciPairw, LrciNMA, UrciNMA)
-  colnames(output) <- c("DirectTE","DirectSE","DirectL","DirectU",
-                        "NetworkTE","NetworkSE","NetworkL","NetworkU",
-                        "delta","DirectZscore", "DirectI", "NetworkZscore", 
-                        "NetworkI", "DirectTaccum", "NetworkTaccum", "DirectAlpha", 
-                        "DirectBoundary", "NetworkAlpha", "NetworkBoundary", 
-                        "DirectLowerRCI", "DirectUpperRCI", "NetworkLowerRCI", 
-                        "NetworkUpperRCI")
-  ###!!!!!!!! gia na apofeugeis lathi stis antistoixiseis kalutera ta dyo parapanw commands na ta grapseis
-  ###!!!  output = cbind.data.frame(input,delta=delta,DirectZscore=Zpairw,DirectI= Ipairw......)
-  
-  
-  return(output)###!!!! den katalabainw giati na einai list?
+  output=cbind.data.frame(input,delta=delta,DirectZscore=Zpairw,DirectI= Ipairw, NetworkZscore=Zntw, NetworkI=Intw,
+                          DirectTaccum=tallPairw, NetworkTaccum=tallNMA, DirectAlpha=SeqEffPairw$at, 
+                          DirectBoundary=SeqEffPairw$E, NetworkAlpha=SeqEffNMA$at, NetworkBoundary=SeqEffNMA$E, 
+                          DirectLowerRCI=LrciPairw, DirectUpperRCI=UrciPairw, 
+                          NetworkLowerRCI=LrciNMA, NetworkUpperRCI=UrciNMA)
+  return(output)
   }
 }
 

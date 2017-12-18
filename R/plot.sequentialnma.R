@@ -16,17 +16,17 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
   if (!inherits(seqnmaobject, "sequentialnma")) 
     stop("Argument 'seqnmaobject' must be an object of class \"sequentialnma\"")
   
-  DirectZscore = unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"DirectZscore"])},
+  DirectZscore = unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"DirectZscore"])},
                                1:length(seqnmaobject$result)))
-  NetworkZscore = unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkZscore"])},
+  NetworkZscore = unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"NetworkZscore"])},
                                 1:length(seqnmaobject$result)))
-  DirectT = unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"DirectTaccum"])},
+  DirectT = unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"DirectTaccum"])},
                           1:length(seqnmaobject$result)))
-  NetworkT = unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkTaccum"])},
+  NetworkT = unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"NetworkTaccum"])},
                            1:length(seqnmaobject$result)))
-  DirectEfficacyB = unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"DirectBoundary"])},
+  DirectEfficacyB = unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"DirectBoundary"])},
                                   1:length(seqnmaobject$result)))
-  NetworkEfficacyB = unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkBoundary"])},
+  NetworkEfficacyB = unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"NetworkBoundary"])},
                                    1:length(seqnmaobject$result)))
 
   ForStopFramPlot=data.frame(DirectZscore,NetworkZscore,DirectT,NetworkT,DirectEfficacyB,NetworkEfficacyB)

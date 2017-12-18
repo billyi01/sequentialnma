@@ -12,18 +12,21 @@
 #If not specified heterogeneity is re-estimated at each step from the data.
 #comb.fixed: A logical indicating whether a fixed effect meta-analysis should be conducted.
 #comb.random: A logical indicating whether a random effects meta-analysis should be conducted.
+#typeIerror: the type I error to be used in the calculations of the sequential boundaries
+#power: the power to be used in the calculations of the sequential boundaries
+#method: the method to be approximated in the alpha spending function to construct the sequential boundaries, 
+#e.g. BF (O'Brien Flemming),"POC" (Pocock), "LIN" (Linear), "PFUN" (power function)
 ###################################################################################################
-
 
 sequentialnma = function (data, perarm=T, type, sm, tau.preset = NULL, comb.fixed=F, comb.random=T 
                         , studlab="id",sortvar="year", t="t", r="r", n="n", y="y", sd="sd", TE="TE", seTE="seTE"
-                        , t1="t1", t2="t2")
+                        , t1="t1", t2="t2",typeIerror=0.05, power=0.9, method="BF")
 {
-  library(netmeta)# !!!!!!!!!kai egw etsi ta kanw alla blepw oti alloi to kanoun me  nameoflinbrary::functionname
+  library(netmeta)
   library(meta)
   library(plyr)
   library(caTools)
-  #library(devtools) ###!!!!!!!!!!!!!!! nomizw den xreiazetai?
+  library(devtools) 
   
   #define arguments, correspond them to default names and sort them using formatdata function
   args =  unlist(as.list(match.call())); 
@@ -38,16 +41,21 @@ sequentialnma = function (data, perarm=T, type, sm, tau.preset = NULL, comb.fixe
   
   #run main function which performs sequential nma on the list of sequentially added ids
   runmain = function(x){main(data=studies[studies$id %in% x,], perarm=perarm, type=type, sm=sm, 
-                           tau.preset=tau.preset, comb.fixed, comb.random, delta=delta)}
+                           tau.preset=tau.preset, comb.fixed, comb.random, delta=delta,
+                           typeIerror=typeIerror, power=power, method=method)}
   
   result=mapply(runmain,accIds,SIMPLIFY = FALSE) 
 
   #run again the last step of sequential nma including all studies
-  #(this may be redundant but I included it to consider whether only this will be the visible outcome)
   laststep=main(data=studies, perarm=perarm, type=type, sm=sm, 
-                tau.preset = tau.preset, comb.fixed, comb.random, delta=delta)
-  suppressMessages({
-    res=list(result=result,studies=studies,laststep=laststep);
+                tau.preset = tau.preset, comb.fixed, comb.random, delta=delta,
+                typeIerror=typeIerror, power=power, method=method)
+  
+  #vector with comparisons
+  comparisons=rownames(result[[length(unique(studies$id))]])
+  
+  suppressWarnings({
+    res=list(result=result,studies=studies,laststep=laststep, comparisons=comparisons);
     class(res)<-"sequentialnma"
   })
   return(res)

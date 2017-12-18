@@ -17,25 +17,25 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values=NA){
     stop("Argument 'seqnmaobject' must be an object of class \"sequentialnma\"")
 
   #####################set values#############################
-  DirTE = unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"DirectTE"])},
+  DirTE = unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"DirectTE"])},
                         1:length(seqnmaobject$result)))
-  NetwTE=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkTE"])},
+  NetwTE=unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"NetworkTE"])},
                        1:length(seqnmaobject$result)))
-  DirLCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"DirectL"])},
+  DirLCI=unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"DirectL"])},
                        1:length(seqnmaobject$result)))
-  NetworkLCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkL"])},
+  NetworkLCI=unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"NetworkL"])},
                            1:length(seqnmaobject$result)))
-  DirectUCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"DirectU"])},
+  DirectUCI=unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"DirectU"])},
                           1:length(seqnmaobject$result)))
-  NetworkUCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkU"])},
+  NetworkUCI=unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"NetworkU"])},
                            1:length(seqnmaobject$result)))
-  DirectLRCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"DirectLowerRCI"])},
+  DirectLRCI=unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"DirectLowerRCI"])},
                            1:length(seqnmaobject$result)))
-  NetworkLRCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkLowerRCI"])},
+  NetworkLRCI=unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"NetworkLowerRCI"])},
                             1:length(seqnmaobject$result)))
-  DirectURCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"DirectUpperRCI"])},
+  DirectURCI=unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"DirectUpperRCI"])},
                            1:length(seqnmaobject$result)))
-  NetworkURCI=unlist(mapply(function(i){(seqnmaobject$result[[i]]$output[comparison,"NetworkUpperRCI"])},
+  NetworkURCI=unlist(mapply(function(i){(seqnmaobject$result[[i]][comparison,"NetworkUpperRCI"])},
                             1:length(seqnmaobject$result)))
   steps=length(NetwTE):1
   steps0=steps-0.2

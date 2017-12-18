@@ -14,7 +14,7 @@ source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/fordelta.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/alpha.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/formatdata.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/main.R')
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/rci.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/repeatedCI.R')
 source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/plot.sequentialnma.R')
 
 #load the old functions
@@ -26,6 +26,11 @@ library(sequentialnma)
 ########################################################
 
 library(readr)
+test <- read_delim("C:/Users/nikolakopoulou/Desktop/conclusive revision/test.csv", 
+                      ";", escape_double = FALSE, trim_ws = TRUE)
+
+
+
 test <- read_delim("C:/Users/nikolakopoulou/Desktop/test.csv", 
                    ";", escape_double = FALSE, trim_ws = TRUE)
 test=as.data.frame(test)

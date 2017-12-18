@@ -1,0 +1,25 @@
+rm(list=ls())
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/sequentialnma.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/fordelta.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/alpha.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/formatdata.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/main.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/repeatedCI.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/plot.sequentialnma.R')
+
+
+library(readr)
+test <- read_delim("C:/Users/nikolakopoulou/Desktop/conclusive revision/test.csv", 
+                   ";", escape_double = FALSE, trim_ws = TRUE)
+
+testseq <- sequentialnma(data=test, perarm=TRUE, type="binary", sm="OR", tau.preset = sqrt(0.014), 
+                           comb.fixed=F, comb.random=T,
+                           studlab="id",sortvar="year")
+
+Leuchtsmall <- read_delim("C:/Users/nikolakopoulou/Desktop/conclusive revision/Leuchtsmall.csv", 
+                          ";", escape_double = FALSE, trim_ws = TRUE)
+
+leuchtseq <- sequentialnma(data=Leuchtsmall, perarm=FALSE, type="continuous", sm="SMD", tau.preset = sqrt(0.049), 
+                             comb.fixed=F, comb.random=T,
+                             studlab="id",sortvar="year", TE="effect", seTE="se",
+                             t1="treat1", t2="treat2")
