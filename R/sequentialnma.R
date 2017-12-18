@@ -52,7 +52,7 @@ sequentialnma = function (data, perarm=T, type, sm, tau.preset = NULL, comb.fixe
                 typeIerror=typeIerror, power=power, method=method)
   
   #vector with comparisons
-  comparisons=rownames(result[[length(unique(studies$id))]])
+  comparisons=rownames(result[[length(uniqueids)]])
   
   suppressWarnings({
     res=list(result=result,studies=studies,laststep=laststep, comparisons=comparisons);
