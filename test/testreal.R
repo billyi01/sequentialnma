@@ -129,4 +129,21 @@ NetworkseTE2 = unlist(mapply(function(i){(Dongseq$result[[i]]$output["ICS:LABA-I
 plot(seqnmaobject=Dongseq,comparison="ICS:LABA-ICS",evidence="both",small.values=NA) 
 repeatedCI(seqnmaobject=Dongseq,comparison="ICS:LABA-ICS",evidence="both.separate",small.values=NA) 
 
+###############
+data(Dong)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

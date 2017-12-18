@@ -1,0 +1,8 @@
+Comparisons will not be considered in network meta-analysis:
+ TE seTE studlab   treat1   treat2 event1  n1 event2  n2 incr allstudies
+ NA   NA      37      ICS     LABA      0 183      0 177  0.5      FALSE
+ NA   NA      37      ICS LABA-ICS      0 183      0 178  0.5      FALSE
+ NA   NA      37      ICS  Placebo      0 183      0 185  0.5      FALSE
+ NA   NA      37     LABA LABA-ICS      0 177      0 178  0.5      FALSE
+ NA   NA      37     LABA  Placebo      0 177      0 185  0.5      FALSE
+ NA   NA      37 LABA-ICS  Placebo      0 178      0 185  0.5      FALSE

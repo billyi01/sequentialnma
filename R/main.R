@@ -1,20 +1,25 @@
 #A function that calculates the sequential quantities and boundaries at each step of the analysis
 #the input is a subset of the sequentialnma arguments apart from the delta argument which is inputed by fordelta function
 
-main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixed=F, comb.random=T,delta=NA){
+main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixed=F, comb.random=T, delta=NA){
   
   #perform network meta-analysis
   if (perarm & type=="binary"){
-    Dpairs=pairwise(treat=t,event=r,n=n, data=data, studlab = id, sm= sm)
-    checkconn=netconnection(treat1,treat2,studlab,data=Dpairs)
+    Dpairs = suppressWarnings(
+        pairwisenowarn(treat=t,event=r,n=n, data=data, studlab = id, sm = sm, warn=F)
+        )
+      checkconn = netconnection(treat1,treat2,studlab,data=Dpairs)
     if (checkconn$n.subnets==1){
-      metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
-                        comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
+      metaNetw = netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
+                         comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset
+                        , warn = F)
     }
   } 
   
   if (perarm & type=="continuous"){
-    Dpairs=pairwise(treat=t,mean=y,sd=sd,n=n,data=data, studlab =id, sm=sm)
+    Dpairs=invisible(
+      pairwise(treat=t,mean=y,sd=sd,n=n,data=data, studlab =id, sm=sm)
+    )
     checkconn=netconnection(treat1,treat2,studlab,data=Dpairs)
     if (checkconn$n.subnets==1){
     metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
@@ -83,7 +88,7 @@ main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixe
   
   #calculation of sequential boundaries using alpha function
 ##!!!!!!!!! afou stin alpha exeis balei mesa kai ta alla option oxi mono BF giati dne to exeis to BF argument?
-    SeqEffPairw = alpha(method = "BF", t = tallPairw)
+  SeqEffPairw = alpha(method = "BF", t = tallPairw)
   SeqEffNMA = alpha(method = "BF", t = tallNMA)
   AtPairw = SeqEffPairw[, 2]##!!!!!!!!! perita, des parakatw
   EbPairw = SeqEffPairw[, 3]
@@ -110,7 +115,7 @@ main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixe
   ###!!!  output = cbind.data.frame(input,delta=delta,DirectZscore=Zpairw,DirectI= Ipairw......)
   
   
-  return(list(output=output))###!!!! den katalabainw giati na einai list?
+  return(output)###!!!! den katalabainw giati na einai list?
   }
 }
 

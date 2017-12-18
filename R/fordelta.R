@@ -5,13 +5,15 @@ fordelta <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.
   
   #perform network meta-analysis
   if (perarm & type=="binary"){
-    Dpairs=pairwise(treat=t,event=r,n=n, data=data, studlab = id, sm= sm)
+    Dpairs=suppressWarnings(
+      pairwisenowarn(treat=t,event=r,n=n, data=data, studlab = id, sm= sm, warn=F)
+    )
       metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
                         comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
   } 
   
   if (perarm & type=="continuous"){
-    Dpairs=pairwise(treat=t,mean=y,sd=sd,n=n,data=data, studlab =id, sm=sm)
+    Dpairs=pairwisenowarn(treat=t,mean=y,sd=sd,n=n,data=data, studlab =id, sm=sm)
       metaNetw<-netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
                         comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset)
   }
