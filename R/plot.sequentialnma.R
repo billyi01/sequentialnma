@@ -35,10 +35,12 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
   
   if (evidence == "pairwise"){
     p <- ggplot(ForStopFramPlot)+
-      geom_point(aes(ForStopFramPlot$DirectT,ForStopFramPlot$DirectZscore))
-    p=p+geom_line(aes(ForStopFramPlot$DirectT,ForStopFramPlot$DirectEfficacyB))
-    p=p+geom_line(aes(ForStopFramPlot$DirectT,-ForStopFramPlot$DirectEfficacyB))
-    p=p + geom_vline(xintercept = 1)
+      geom_point(aes(ForStopFramPlot$DirectT,ForStopFramPlot$DirectZscore),na.rm = T)
+    p=p+geom_line(aes(ForStopFramPlot$DirectT,ForStopFramPlot$DirectEfficacyB),na.rm = T)
+    p=p+geom_line(aes(ForStopFramPlot$DirectT,-ForStopFramPlot$DirectEfficacyB),na.rm = T)
+    p=p + geom_vline(xintercept = 1,linetype="dotted")
+    p=p + geom_hline(yintercept=qnorm(1 - 0.05/2),linetype="dotted")
+    p=p + geom_hline(yintercept=-qnorm(1 - 0.05/2),linetype="dotted")
     p=p +labs(title=comparison,
               x ="Fraction of maximum information")
     
@@ -55,10 +57,12 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
   }
   if (evidence == "network"){
     p <- ggplot(ForStopFramPlot)+
-      geom_point(aes(ForStopFramPlot$NetworkT,ForStopFramPlot$NetworkZscore))
-    p=p+geom_line(aes(ForStopFramPlot$NetworkT,ForStopFramPlot$NetworkEfficacyB))
-    p=p+geom_line(aes(ForStopFramPlot$NetworkT,-ForStopFramPlot$NetworkEfficacyB))
-    p=p + geom_vline(xintercept = 1)
+      geom_point(aes(ForStopFramPlot$NetworkT,ForStopFramPlot$NetworkZscore),na.rm = T)
+    p=p+geom_line(aes(ForStopFramPlot$NetworkT,ForStopFramPlot$NetworkEfficacyB),na.rm = T)
+    p=p+geom_line(aes(ForStopFramPlot$NetworkT,-ForStopFramPlot$NetworkEfficacyB),na.rm = T)
+    p=p + geom_vline(xintercept = 1,linetype="dotted")
+    p=p + geom_hline(yintercept=qnorm(1 - 0.05/2),linetype="dotted")
+    p=p + geom_hline(yintercept=-qnorm(1 - 0.05/2),linetype="dotted")
     p=p +labs(title=comparison,
               x ="Fraction of maximum information")
     
@@ -98,10 +102,12 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
     }
     
     p1 <- ggplot(ForStopFramPlot)+
-      geom_point(aes(ForStopFramPlot$DirectT,ForStopFramPlot$DirectZscore))
-    p1=p1+geom_line(aes(ForStopFramPlot$DirectT,ForStopFramPlot$DirectEfficacyB))
-    p1=p1+geom_line(aes(ForStopFramPlot$DirectT,-ForStopFramPlot$DirectEfficacyB))
-    p1=p1 + geom_vline(xintercept = 1)
+      geom_point(aes(ForStopFramPlot$DirectT,ForStopFramPlot$DirectZscore),na.rm = T)
+    p1=p1+geom_line(aes(ForStopFramPlot$DirectT,ForStopFramPlot$DirectEfficacyB),na.rm = T)
+    p1=p1+geom_line(aes(ForStopFramPlot$DirectT,-ForStopFramPlot$DirectEfficacyB),na.rm = T)
+    p1=p1 + geom_vline(xintercept = 1,linetype="dotted")
+    p1=p1 + geom_hline(yintercept=qnorm(1 - 0.05/2),linetype="dotted")
+    p1=p1 + geom_hline(yintercept=-qnorm(1 - 0.05/2),linetype="dotted")
     p1=p1 +labs(title=comparison,
               x ="Fraction of maximum information")
     
@@ -116,10 +122,12 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
     }
     
     p2 <- ggplot(ForStopFramPlot)+
-      geom_point(aes(ForStopFramPlot$NetworkT,ForStopFramPlot$NetworkZscore))
-    p2=p2+geom_line(aes(ForStopFramPlot$NetworkT,ForStopFramPlot$NetworkEfficacyB))
-    p2=p2+geom_line(aes(ForStopFramPlot$NetworkT,-ForStopFramPlot$NetworkEfficacyB))
-    p2=p2 + geom_vline(xintercept = 1)
+      geom_point(aes(ForStopFramPlot$NetworkT,ForStopFramPlot$NetworkZscore),na.rm = T)
+    p2=p2+geom_line(aes(ForStopFramPlot$NetworkT,ForStopFramPlot$NetworkEfficacyB),na.rm = T)
+    p2=p2+geom_line(aes(ForStopFramPlot$NetworkT,-ForStopFramPlot$NetworkEfficacyB),na.rm = T)
+    p2=p2 + geom_vline(xintercept = 1,linetype="dotted")
+    p2=p2 + geom_hline(yintercept=qnorm(1 - 0.05/2),linetype="dotted")
+    p2=p2 + geom_hline(yintercept=-qnorm(1 - 0.05/2),linetype="dotted")
     p2=p2 +labs(title=comparison,
               x ="Fraction of maximum information")
     

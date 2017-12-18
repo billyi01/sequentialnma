@@ -1,8 +1,10 @@
 ##################################################################################################
 ### Presents the accumulated information through the sequential NMA for a specified comparison ###
 ##################################################################################################
+# seqnmaobject: An object of class sequentialnma
+# comparison: A character string defining the comparison for which the stopping framework is to be drawn.
 
-summary.sequentialnma=function(seqnmaobject,comparison,evidence){
+summary.sequentialnma=function(seqnmaobject,comparison){
   
   if (!inherits(seqnmaobject, "sequentialnma"))
     stop("Argument 'seqnmaobject' must be an object of class \"sequentialnma\"")
