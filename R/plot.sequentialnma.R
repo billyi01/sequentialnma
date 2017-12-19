@@ -1,5 +1,6 @@
-# Stopping framework for pairwise and network meta-analysis
-#
+#########################################################################
+####### Stopping framework for pairwise and network meta-analysis ####### 
+#########################################################################
 # This function draws the panel with z-scores and stopping boundaries
 # in the active graphics window for pairwise and network meta-analysis.
 # seqnmaobject: An object of class sequentialnma
@@ -41,9 +42,9 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
     p=p + geom_vline(xintercept = 1,linetype="dotted")
     p=p + geom_hline(yintercept=qnorm(1 - 0.05/2),linetype="dotted")
     p=p + geom_hline(yintercept=-qnorm(1 - 0.05/2),linetype="dotted")
-    p=p +labs(title=comparison,
+    p=p +labs(title=paste("Sequential framework for",comparison,"based on pairwise meta-analysis", sep=" "),
               x ="Fraction of maximum information")
-    
+
     if(!is.na(small.values) && small.values=="good"){
       p=p +ylab(expression(atop("Z score", paste("Favors first         Favors second"))))
     }
@@ -63,7 +64,7 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
     p=p + geom_vline(xintercept = 1,linetype="dotted")
     p=p + geom_hline(yintercept=qnorm(1 - 0.05/2),linetype="dotted")
     p=p + geom_hline(yintercept=-qnorm(1 - 0.05/2),linetype="dotted")
-    p=p +labs(title=comparison,
+    p=p +labs(title=paste("Sequential framework for",comparison,"based on network meta-analysis", sep=" "),
               x ="Fraction of maximum information")
     
     if(!is.na(small.values) && small.values=="good"){
@@ -108,7 +109,7 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
     p1=p1 + geom_vline(xintercept = 1,linetype="dotted")
     p1=p1 + geom_hline(yintercept=qnorm(1 - 0.05/2),linetype="dotted")
     p1=p1 + geom_hline(yintercept=-qnorm(1 - 0.05/2),linetype="dotted")
-    p1=p1 +labs(title=comparison,
+    p1=p1 +labs(title=paste("Pairwise meta-analysis",comparison, sep=" "),
               x ="Fraction of maximum information")
     
     if(!is.na(small.values) && small.values=="good"){
@@ -128,7 +129,7 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
     p2=p2 + geom_vline(xintercept = 1,linetype="dotted")
     p2=p2 + geom_hline(yintercept=qnorm(1 - 0.05/2),linetype="dotted")
     p2=p2 + geom_hline(yintercept=-qnorm(1 - 0.05/2),linetype="dotted")
-    p2=p2 +labs(title=comparison,
+    p2=p2 +labs(title=paste("Network meta-analysis",comparison, sep=" "),
               x ="Fraction of maximum information")
     
     if(!is.na(small.values) && small.values=="good"){

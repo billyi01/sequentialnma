@@ -28,22 +28,4 @@ summary(testseq,comparison="A:B")
 summary(leuchtseq,comparison="CLO:CPZ")
 
 
-testseq$studies[unique(testseq$studies$id)==1,]
-
-for(i in 1:10){
-  print(unique(testseq$studies$year[testseq$studies$id==unique(testseq$studies$id)[i]]))
-}
-
-m2=mapply(function(i){((unique(testseq$studies$year[testseq$studies$id==unique(testseq$studies$id)[i]])))},
-       1:length(testseq$result))
-
-
-
-testseq$studies$year[unique(testseq$studies$id)[4]]
-
-unique(testseq$studies$id)[10]
-
-unique(testseq$studies$year[testseq$studies$id==unique(testseq$studies$id)[10]])
-
-
 

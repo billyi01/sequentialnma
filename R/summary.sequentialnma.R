@@ -45,7 +45,7 @@ summary.sequentialnma=function(seqnmaobject,comparison){
                              NMAEffect=NetwTE, NMAEffectSE=NetwseTE,
                              CILowNMA=NetworkLCI, CIUpNMA=NetworkUCI, 
                              RCILowNMA=NetworkLRCI, RCIUpNMA=NetworkURCI,
-                             ZscoreNMA=NetworkEfficacyB, alphaNMA=alphaNMA,
+                             ZscoreNMA=NetworkZscore, BoundaryNMA=NetworkEfficacyB,
                              InformationNMA=NetworkI, FractionInformationNMA=NetworkT)
   
   return(resultcum)
