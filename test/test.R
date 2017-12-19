@@ -1,12 +1,34 @@
+install.packages("meta")
+install.packages("netmeta")
+install.packages("plyr")
+install.packages("devtools")
+install.packages("ggplot2")
+install.packages("grid")
+
+install_github("esm-ispm-unibe-ch/sequentialnma")
+library(sequentialnma)
+
+data(Dong)
+
+dongseq <- sequentialnma(data=Dong, perarm=TRUE, type="binary", sm="OR", tau.preset = sqrt(0.014), 
+                         comb.fixed=F, comb.random=T,
+                         studlab="id",sortvar="year")
+
+
+
+
+
+
+
 rm(list=ls())
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/sequentialnma.R')
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/fordelta.R')
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/alpha.R')
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/formatdata.R')
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/main.R')
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/repeatedCI.R')
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/plot.sequentialnma.R')
-source('C:/Users/nikolakopoulou/Desktop/sequentialnma2/R/summary.sequentialnma.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma/R/sequentialnma.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma/R/fordelta.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma/R/alpha.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma/R/formatdata.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma/R/main.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma/R/repeatedCI.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma/R/plot.sequentialnma.R')
+source('C:/Users/nikolakopoulou/Desktop/sequentialnma/R/summary.sequentialnma.R')
 
 library(readr)
 test <- read_delim("C:/Users/nikolakopoulou/Desktop/conclusive revision/test.csv", 

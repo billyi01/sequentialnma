@@ -25,7 +25,7 @@ sequentialnma = function (data, perarm=T, type, sm, tau.preset = NULL, comb.fixe
   library(netmeta)
   library(meta)
   library(plyr)
-  library(caTools)
+  #library(caTools)
   library(devtools) 
   
   #define arguments, correspond them to default names and sort them using formatdata function
@@ -46,11 +46,6 @@ sequentialnma = function (data, perarm=T, type, sm, tau.preset = NULL, comb.fixe
   
   result=mapply(runmain,accIds,SIMPLIFY = FALSE) 
 
-  #run again the last step of sequential nma including all studies
-  laststep=main(data=studies, perarm=perarm, type=type, sm=sm, 
-                tau.preset = tau.preset, comb.fixed, comb.random, delta=delta,
-                typeIerror=typeIerror, power=power, method=method)
-  
   #vector with comparisons
   comparisons=rownames(result[[length(uniqueids)]])
   
