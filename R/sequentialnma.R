@@ -50,7 +50,7 @@ sequentialnma = function (data, perarm=T, type, sm, tau.preset = NULL, comb.fixe
   comparisons=rownames(result[[length(uniqueids)]])
   
   suppressWarnings({
-    res=list(sm=sm, result=result,studies=studies,laststep=laststep, comparisons=comparisons);
+    res=list(sm=sm, result=result,studies=studies, comparisons=comparisons);
     class(res)<-"sequentialnma"
   })
   return(res)
