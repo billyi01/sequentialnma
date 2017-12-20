@@ -69,10 +69,10 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values=NA){
     
     if(seqnmaobject$sm=="OR" | seqnmaobject$sm=="RR" | seqnmaobject$sm=="HR"){
       if(!is.na(small.values) && small.values=="good"){
-        p=p +labs(x =paste("log", seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
+        p=p +labs(x =paste("log", seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
       }
       else if(!is.na(small.values) && small.values=="bad"){
-        p=p +labs(x =paste("log",seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
+        p=p +labs(x =paste("log",seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
       }
       else if(is.na(small.values)){
         p=p +labs(x=paste("log",seqnmaobject$sm))
@@ -80,10 +80,10 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values=NA){
     }
     if(seqnmaobject$sm=="MD" | seqnmaobject$sm=="SMD"){
       if(!is.na(small.values) && small.values=="good"){
-        p=p +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
+        p=p +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
       }
       else if(!is.na(small.values) && small.values=="bad"){
-        p=p +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
+        p=p +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
       }
       else if(is.na(small.values)){
         p=p +labs(x=seqnmaobject$sm)
@@ -105,10 +105,10 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values=NA){
                           "based on network meta-analysis", sep=" "))
     if(seqnmaobject$sm=="OR" | seqnmaobject$sm=="RR" | seqnmaobject$sm=="HR"){
       if(!is.na(small.values) && small.values=="good"){
-        p=p +labs(x =paste("log", seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
+        p=p +labs(x =paste("log", seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
       }
       else if(!is.na(small.values) && small.values=="bad"){
-        p=p +labs(x =paste("log",seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
+        p=p +labs(x =paste("log",seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
       }
       else if(is.na(small.values)){
         p=p +labs(x=paste("log",seqnmaobject$sm))
@@ -116,10 +116,10 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values=NA){
     }
     if(seqnmaobject$sm=="MD" | seqnmaobject$sm=="SMD"){
       if(!is.na(small.values) && small.values=="good"){
-        p=p +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
+        p=p +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
       }
       else if(!is.na(small.values) && small.values=="bad"){
-        p=p +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
+        p=p +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
       }
       else if(is.na(small.values)){
         p=p +labs(x=seqnmaobject$sm)
@@ -162,10 +162,10 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values=NA){
     p1=p1 +labs(title=paste("Pairwise meta-analysis",comparison, sep=" "))
     if(seqnmaobject$sm=="OR" | seqnmaobject$sm=="RR" | seqnmaobject$sm=="HR"){
       if(!is.na(small.values) && small.values=="good"){
-        p1=p1 +labs(x =paste("log", seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
+        p1=p1 +labs(x =paste("log", seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
       }
       else if(!is.na(small.values) && small.values=="bad"){
-        p1=p1 +labs(x =paste("log",seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
+        p1=p1 +labs(x =paste("log",seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
       }
       else if(is.na(small.values)){
         p1=p1 +labs(x=paste("log",seqnmaobject$sm))
@@ -173,10 +173,10 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values=NA){
     }
     if(seqnmaobject$sm=="MD" | seqnmaobject$sm=="SMD"){
       if(!is.na(small.values) && small.values=="good"){
-        p1=p1 +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
+        p1=p1 +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
       }
       else if(!is.na(small.values) && small.values=="bad"){
-        p1=p1 +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
+        p1=p1 +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
       }
       else if(is.na(small.values)){
         p1=p1 +labs(x=seqnmaobject$sm)
@@ -194,10 +194,10 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values=NA){
     p2=p2 +labs(title=paste("Network meta-analysis",comparison, sep=" "))
     if(seqnmaobject$sm=="OR" | seqnmaobject$sm=="RR" | seqnmaobject$sm=="HR"){
       if(!is.na(small.values) && small.values=="good"){
-        p2=p2 +labs(x =paste("log", seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
+        p2=p2 +labs(x =paste("log", seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
       }
       else if(!is.na(small.values) && small.values=="bad"){
-        p2=p2 +labs(x =paste("log",seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
+        p2=p2 +labs(x =paste("log",seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
       }
       else if(is.na(small.values)){
         p2=p2 +labs(x=paste("log",seqnmaobject$sm))
@@ -205,10 +205,10 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values=NA){
     }
     if(seqnmaobject$sm=="MD" | seqnmaobject$sm=="SMD"){
       if(!is.na(small.values) && small.values=="good"){
-        p2=p2 +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
+        p2=p2 +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
       }
       else if(!is.na(small.values) && small.values=="bad"){
-        p2=p2 +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
+        p2=p2 +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
       }
       else if(is.na(small.values)){
         p2=p2 +labs(x=seqnmaobject$sm)
@@ -234,10 +234,10 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values=NA){
 
     if(seqnmaobject$sm=="OR" | seqnmaobject$sm=="RR" | seqnmaobject$sm=="HR"){
         if(!is.na(small.values) && small.values=="good"){
-          p=p +labs(x =paste("log", seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
+          p=p +labs(x =paste("log", seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
         }
         else if(!is.na(small.values) && small.values=="bad"){
-          p=p +labs(x =paste("log",seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
+          p=p +labs(x =paste("log",seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
         }
         else if(is.na(small.values)){
           p=p +labs(x=paste("log",seqnmaobject$sm))
@@ -245,10 +245,10 @@ repeatedCI<-function(seqnmaobject,comparison,evidence,small.values=NA){
       }
     if(seqnmaobject$sm=="MD" | seqnmaobject$sm=="SMD"){
         if(!is.na(small.values) && small.values=="good"){
-          p=p +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
+          p=p +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
         }
         else if(!is.na(small.values) && small.values=="bad"){
-          p=p +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][2]), y = " ")
+          p=p +labs(x =paste(seqnmaobject$sm, "smaller than 0 favors",strsplit(comparison,split=":")[[1]][1]), y = " ")
         }
         else if(is.na(small.values)){
           p=p +labs(x=seqnmaobject$sm)

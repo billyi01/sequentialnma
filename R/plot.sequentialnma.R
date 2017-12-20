@@ -46,10 +46,10 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
               x ="Fraction of maximum information")
 
     if(!is.na(small.values) && small.values=="good"){
-      p=p +ylab(expression(atop("Z score", paste("Favors first         Favors second"))))
+      p=p +ylab(expression(atop("Z score", paste("Favors second         Favors first"))))
     }
     else if(!is.na(small.values) && small.values=="bad"){
-      p=p +ylab(expression(atop("Z score", paste("Favors second         Favors first"))))
+      p=p +ylab(expression(atop("Z score", paste("Favors first         Favors second"))))
     }
     else if(is.na(small.values)){
       p=p +ylab("Z score")
@@ -68,10 +68,10 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
               x ="Fraction of maximum information")
     
     if(!is.na(small.values) && small.values=="good"){
-      p=p +ylab(expression(atop("Z score", paste("Favors first         Favors second"))))
+      p=p +ylab(expression(atop("Z score", paste("Favors second         Favors first"))))
     }
     else if(!is.na(small.values) && small.values=="bad"){
-      p=p +ylab(expression(atop("Z score", paste("Favors second         Favors first"))))
+      p=p +ylab(expression(atop("Z score", paste("Favors first         Favors second"))))
     }
     else if(is.na(small.values)){
       p=p +ylab("Z score")
@@ -113,10 +113,10 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
               x ="Fraction of maximum information")
     
     if(!is.na(small.values) && small.values=="good"){
-      p1=p1 +ylab(expression(atop("Z score", paste("Favors first         Favors second"))))
+      p1=p1 +ylab(expression(atop("Z score", paste("Favors second         Favors first"))))
     }
     else if(!is.na(small.values) && small.values=="bad"){
-      p1=p1 +ylab(expression(atop("Z score", paste("Favors second         Favors first"))))
+      p1=p1 +ylab(expression(atop("Z score", paste("Favors first         Favors second"))))
     }
     else if(is.na(small.values)){
       p1=p1 +ylab("Z score")
@@ -133,10 +133,10 @@ plot.sequentialnma=function (seqnmaobject,comparison,evidence,small.values=NA)
               x ="Fraction of maximum information")
     
     if(!is.na(small.values) && small.values=="good"){
-      p2=p2 +ylab(expression(atop("Z score", paste("Favors first         Favors second"))))
+      p2=p2 +ylab(expression(atop("Z score", paste("Favors second         Favors first"))))
     }
     else if(!is.na(small.values) && small.values=="bad"){
-      p2=p2 +ylab(expression(atop("Z score", paste("Favors second         Favors first"))))
+      p2=p2 +ylab(expression(atop("Z score", paste("Favors first         Favors second"))))
     }
     else if(is.na(small.values)){
       p2=p2 +ylab("Z score")
