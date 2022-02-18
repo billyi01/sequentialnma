@@ -10,18 +10,18 @@ fordelta <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.
   if (perarm & type=="binary"){
     Dpairs=suppressWarnings(pairwise(treat=t,event=r,n=n, data=data, studlab = id, sm= sm, warn=F))
       metaNetw=suppressWarnings(netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
-                        comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset))
+                        comb.fixed =F,comb.random = T,tol.multiarm=0.001,tau.preset = tau.preset))
   } 
   
   if (perarm & type=="continuous"){
     Dpairs=suppressWarnings(pairwise(treat=t,mean=y,sd=sd,n=n,data=data, studlab =id, sm=sm))
       metaNetw=suppressWarnings(netmeta(TE,seTE,treat1,treat2,studlab,data=Dpairs,sm=sm,
-                        comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset))
+                        comb.fixed =F,comb.random = T,tol.multiarm=0.001,tau.preset = tau.preset))
   }
   
   if (!perarm){
       metaNetw=suppressWarnings(netmeta(TE,seTE,t1,t2,studlab=id,data=data,sm=sm,
-                       comb.fixed =F,comb.random = T,tol.multiarm=T,tau.preset = tau.preset))
+                       comb.fixed =F,comb.random = T,tol.multiarm=0.001,tau.preset = tau.preset))
   }
   
     #store pairwise and network meta-analysis results
