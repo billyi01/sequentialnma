@@ -34,8 +34,7 @@ main <- function(data, perarm=T, type, sm=sm, tau.preset = tau.preset, comb.fixe
     checkconn=netconnection(t1,t2,studlab=id,data=data)
     if (checkconn$n.subnets==1){
     metaNetw=suppressWarnings(netmeta(TE,seTE,t1,t2,studlab=id,data=data,sm=sm,
-                     comb.fixed =F,comb.random = T, tol.multiarm = 0.001
-                                      tau.preset = tau.preset)
+                     comb.fixed =F,comb.random = T, tol.multiarm = 0.001, tau.preset = tau.preset)
     )
     }
   }
